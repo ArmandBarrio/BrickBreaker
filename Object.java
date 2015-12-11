@@ -21,7 +21,6 @@ public class  Object {
    
     // Constructeur
     public Object(String NomImage, int ax, int ay, float ad, float av)    {
-    super();
          try {
              image= ImageIO.read(new File(NomImage));
              } 
