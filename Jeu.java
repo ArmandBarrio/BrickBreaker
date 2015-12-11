@@ -16,6 +16,9 @@ public class Jeu extends JFrame implements ActionListener{
 	public int TempsTimer_ms = 100;
 	public Timer Montimer;
 	public long Temps;
+    
+    //Add the Object array
+    public Brick lesBriques[]= new Brick[2];
 
 	//Game Animation
 	public int NbVies = 3;
@@ -39,6 +42,9 @@ public class Jeu extends JFrame implements ActionListener{
     
     //Objets
     public Brick brique;
+    public Brick brique1;
+    
+    public Object Ball;
 	
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
@@ -50,6 +56,11 @@ public class Jeu extends JFrame implements ActionListener{
 		int screenWidth = (int)(screenSize.getWidth());
 		int screenHeight = (int)(screenSize.getHeight());
         brique = new Brick ( 100, 100,"brick.jpg",0);
+        brique1 = new Brick ( 200, 200,"brick.jpg",0);
+        lesBriques[0]=brique;
+        lesBriques[1]=brique1;
+        Ball = new Object("Paddle.png", 100,100, 0,0);
+        
 		
 		//Make Window appear		
 		this.setTitle("Brick Breaker");
@@ -65,7 +76,6 @@ public class Jeu extends JFrame implements ActionListener{
 		Wallpaper = T.getImage("wallpaper.jpg");
 		startScreenWallpaper = T.getImage("StartScreen.jpg");
 		paddle = T.getImage("Paddle.png");
-        brick = T.getImage("Brick.jpg");
         
 
 		
@@ -74,6 +84,14 @@ public class Jeu extends JFrame implements ActionListener{
 		//ActionListener
 		Montimer = new Timer(TempsTimer_ms,this);	
 		Montimer.start();
+        
+        // tests if there are collisions
+        for (int i = 0; i < lesBriques.length; i++){
+            if (lesBriques[i].Collision(Ball)){
+                lesBriques[i].state= lesBriques[i].state-1;
+            }
+        }
+        System.out.println( brique.state);
 		
 		
 		//Buffer and all
@@ -114,7 +132,10 @@ public class Jeu extends JFrame implements ActionListener{
 		}else{
             
 			buffer.drawImage(Wallpaper,0,0,this);
-            buffer.drawImage(brique.image, brique.x,brique.y,this);
+            for ( int i = 0; i< lesBriques.length; i++){
+                buffer.drawImage(lesBriques[i].image, lesBriques[i].x,lesBriques[i].y,this);
+            }
+            buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
 		}
 			
 		g.drawImage(ArrierePlan,0,0,this);
