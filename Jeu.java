@@ -35,13 +35,17 @@ public class Jeu extends JFrame implements ActionListener{
 	public Image Wallpaper;
 	public Image startScreenWallpaper;
 	public Image paddle;
+    public Image brick;
 	
 	//Screen Dimension
 	int screenWidth;
 	int screenHeight;
 	
 	//Start Screen
-	boolean startScreen = true;
+	boolean startScreen = false;
+    
+    //Objets
+    public Brick brique;
 	
 	//font
 	Font font;
@@ -53,8 +57,14 @@ public class Jeu extends JFrame implements ActionListener{
 	public Jeu(){
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+<<<<<<< HEAD
 		screenWidth = (int)(screenSize.getWidth());
 		screenHeight = (int)(screenSize.getHeight());
+=======
+		int screenWidth = (int)(screenSize.getWidth());
+		int screenHeight = (int)(screenSize.getHeight());
+        brique = new Brick ( 100, 100,"brick.jpg",0);
+>>>>>>> e8e0020f4744723d130332ae954e9389be80de12
 		
 		//Make Window appear		
 		this.setTitle("Brick Breaker");
@@ -70,6 +80,8 @@ public class Jeu extends JFrame implements ActionListener{
 		Wallpaper = T.getImage("wallpaper.jpg");
 		startScreenWallpaper = T.getImage("StartScreen.jpg");
 		paddle = T.getImage("Paddle.png");
+        brick = T.getImage("Brick.jpg");
+        
 
 		
 		//paddle = new Objet("navire.png", (int)(Ecran.width/2),(int)(Ecran.height/2),0,0);
@@ -143,7 +155,9 @@ public class Jeu extends JFrame implements ActionListener{
 			buffer.drawString("Exit",(int)(screenWidth*0.4),(int)(screenHeight*0.8));
 			
 		}else{
+            
 			buffer.drawImage(Wallpaper,0,0,this);
+            buffer.drawImage(brique.image, brique.x,brique.y,this);
 		}
 			
 		g.drawImage(ArrierePlan,0,0,this);
