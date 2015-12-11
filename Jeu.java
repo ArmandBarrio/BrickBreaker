@@ -10,6 +10,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 
+// for Music
+
+
 public class Jeu extends JFrame implements ActionListener{
 	
 	//Add Timer
@@ -33,8 +36,15 @@ public class Jeu extends JFrame implements ActionListener{
 	public Image startScreenWallpaper;
 	public Image paddle;
 	
+	//Screen Dimension
+	int screenWidth;
+	int screenHeight;
+	
 	//Start Screen
 	boolean startScreen = true;
+	
+	//font
+	Font font;
 	
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
@@ -43,8 +53,8 @@ public class Jeu extends JFrame implements ActionListener{
 	public Jeu(){
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int screenWidth = (int)(screenSize.getWidth());
-		int screenHeight = (int)(screenSize.getHeight());
+		screenWidth = (int)(screenSize.getWidth());
+		screenHeight = (int)(screenSize.getHeight());
 		
 		//Make Window appear		
 		this.setTitle("Brick Breaker");
@@ -73,6 +83,18 @@ public class Jeu extends JFrame implements ActionListener{
 		ArrierePlan = new BufferedImage(Ecran.width,Ecran.height,BufferedImage.TYPE_INT_RGB);
 		buffer = ArrierePlan.getGraphics();
 		
+		//play music (doesn't work yet)
+		music();
+			
+			
+		// Font
+		 try{
+			font = Font.createFont(Font.TRUETYPE_FONT, new File("COMPUTER.TTF"));
+			buffer.setFont(font.deriveFont(40.0f));
+        } catch(Exception ex){
+            System.out.println("Fonte COMPUTER.TTF non trouvée !");
+        } 
+		
 		this.setVisible(true);
 		repaint();
 	}
@@ -84,6 +106,9 @@ public class Jeu extends JFrame implements ActionListener{
 			Temps++;
 			
 	}
+	
+	public void music(){
+	}
 		
 	public void gestionPaddle(){
 			
@@ -94,16 +119,29 @@ public class Jeu extends JFrame implements ActionListener{
 			
 			
 	}
+	
+	public void gestionBall(){
+		
+		
+	}
 				
 	public void paint(Graphics g){
 		
 		
 		if(startScreen == true){
 			buffer.drawImage(startScreenWallpaper,0,0,this);
-			buffer.setFont(new Font("TimesRoman", Font.PLAIN, 300));
-			buffer.setColor(Color.blue);
-			buffer.drawString("New Game?",100,500);
-			g.drawImage(paddle,0,0,this);
+			buffer.setFont(font); // StyleConstants.setFontSize(fontSize, 25)
+			buffer.setColor(Color.white);
+			buffer.drawString("New Game?",100,(int)(screenHeight*0.3));
+			
+			buffer.setFont(new Font("Dialog", Font.PLAIN, (int)(screenHeight*0.17)));
+			buffer.setColor(Color.white);
+			buffer.drawString("Yes",(int)(screenWidth*0.4),(int)(screenHeight*0.6));
+			
+			buffer.setFont(new Font("Dialog", Font.PLAIN, (int)(screenHeight*0.17)));
+			buffer.setColor(Color.white);
+			buffer.drawString("Exit",(int)(screenWidth*0.4),(int)(screenHeight*0.8));
+			
 		}else{
 			buffer.drawImage(Wallpaper,0,0,this);
 		}
