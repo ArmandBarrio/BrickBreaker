@@ -63,22 +63,19 @@ public class Jeu extends JFrame implements ActionListener{
 	public Jeu(){
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-<<<<<<< HEAD
+
 		screenWidth = (int)(screenSize.getWidth());
 		screenHeight = (int)(screenSize.getHeight());
-=======
 		int screenWidth = (int)(screenSize.getWidth());
 		int screenHeight = (int)(screenSize.getHeight());
-        brique = new Brick ( 100, 100,"brick.jpg",0);
-<<<<<<< HEAD
-        brique1 = new Brick ( 200, 200,"brick.jpg",0);
+        
+        // Pour tester les briques
+        brique = new Brick ( 100, 100,"Unbreakable",-1);
+        brique1 = new Brick ( 200, 200,"Normal",1);
         lesBriques[0]=brique;
         lesBriques[1]=brique1;
-        Ball = new Object("Paddle.png", 100,100, 0,0);
-        
-=======
->>>>>>> e8e0020f4744723d130332ae954e9389be80de12
->>>>>>> 1dc6a184195a17f79222ecabf046fc8c80de62cb
+        Ball = new Object("Ball.png", 200,200, 0,0);
+
 		
 		//Make Window appear		
 		this.setTitle("Brick Breaker");
@@ -105,11 +102,11 @@ public class Jeu extends JFrame implements ActionListener{
         
         // tests if there are collisions
         for (int i = 0; i < lesBriques.length; i++){
-            if (lesBriques[i].Collision(Ball)){
+            if (lesBriques[i].Collision(Ball) && lesBriques[i].state !=0){
                 lesBriques[i].state= lesBriques[i].state-1;
             }
+            System.out.println( lesBriques[i].state);
         }
-        System.out.println( brique.state);
 		
 		
 		//Buffer and all
@@ -178,8 +175,11 @@ public class Jeu extends JFrame implements ActionListener{
 		}else{
             
 			buffer.drawImage(Wallpaper,0,0,this);
+			// afficher toutes les briques actives
             for ( int i = 0; i< lesBriques.length; i++){
-                buffer.drawImage(lesBriques[i].image, lesBriques[i].x,lesBriques[i].y,this);
+				if (lesBriques[i].state != 0){					
+					buffer.drawImage(lesBriques[i].image, lesBriques[i].x,lesBriques[i].y,this);
+				}
             }
             buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
 		}

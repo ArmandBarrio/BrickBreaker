@@ -41,6 +41,18 @@ public class  Object {
         actif=true;
         
     }
+    public Object( int ax, int ay, float ad, float av)    {
+         
+        
+        
+             
+        x=ax;   
+        y=ay;
+        direction=ad;
+        vitesse=av; 
+        actif=true;
+        
+    }
     
     boolean Collision(Object O) {
         return BoxObject.intersects(O.BoxObject); 
