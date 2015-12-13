@@ -5,7 +5,6 @@
 
 */
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
@@ -23,6 +22,7 @@ public class  Brick extends Object {
             System.out.println("Unbreakable.png"+" introuvable !");            
             System.exit(0);    
             }
+            this.state = -1;
 		}
 			
 		if (Type == "Normal" && state > 0){

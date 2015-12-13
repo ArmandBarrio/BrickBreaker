@@ -21,7 +21,7 @@ public class Jeu extends JFrame implements ActionListener{
 	public long Temps;
     
     //Add the Object array
-    public Brick lesBriques[]= new Brick[4];
+    public Brick lesBriques[][]= new Brick[12][3];
 
 	//Game Animation
 	public int NbVies = 3;
@@ -45,7 +45,7 @@ public class Jeu extends JFrame implements ActionListener{
 	int screenHeight;
 	
 	//Start Screen
-	boolean startScreen = false;
+	boolean startScreen = true;
     
     //Objets
     public Brick brique;
@@ -73,7 +73,18 @@ public class Jeu extends JFrame implements ActionListener{
 		int screenHeight = (int)(screenSize.getHeight());
         
         // Pour tester les briques
-        brique = new Brick ( 100, 100,"Unbreakable",-1);
+        for (int i = 0; i < lesBriques.length; i++){
+			for (int j = 0 ; j< lesBriques[0].length; j++){
+				double r = Math.random();
+				String randomType = "Normal";
+				int randomState = (int)(Math.random()*3 +1);
+				if (r <0.2)  randomType = "Unbreakable";
+				if ( r > 0.7) randomType = "Normal";
+				lesBriques[i][j] = new Brick ( 10 + i * 70, 50 + j * 34, randomType, randomState );
+			}
+		}
+				
+        /*brique = new Brick ( 100, 100,"Unbreakable",-1);
         brique1 = new Brick ( 200, 200,"Normal",1);
         brique2 = new Brick ( 200, 300,"Normal",2);
         brique3= new Brick ( 200, 400,"Normal",3);
@@ -81,6 +92,7 @@ public class Jeu extends JFrame implements ActionListener{
         lesBriques[1]=brique1;
         lesBriques[2]=brique2;
         lesBriques[3]=brique3;
+        */
         
         Ball = new Object("Ball.png", 400,400, 0,0);
 
@@ -110,10 +122,12 @@ public class Jeu extends JFrame implements ActionListener{
         
         // tests if there are collisions
         for (int i = 0; i < lesBriques.length; i++){
-            if (lesBriques[i].Collision(Ball) && lesBriques[i].state !=0){
-                lesBriques[i].state= lesBriques[i].state-1;
-            }
-            System.out.println( lesBriques[i].state);
+			for (int j = 0 ; j < lesBriques[0].length;  j++){
+				if (lesBriques[i][j].Collision(Ball) && lesBriques[i][j].state !=0){
+					lesBriques[i][j].state= lesBriques[i][j].state-1;
+				}
+            System.out.println( lesBriques[i][j].state);
+			}
         }
 		
 		
@@ -185,10 +199,13 @@ public class Jeu extends JFrame implements ActionListener{
 			buffer.drawImage(Wallpaper,0,0,this);
 			// afficher toutes les briques actives
             for ( int i = 0; i< lesBriques.length; i++){
-				if (lesBriques[i].state != 0){					
-					buffer.drawImage(lesBriques[i].image, lesBriques[i].x,lesBriques[i].y,this);
+				for (int j = 0 ; j < lesBriques[0].length;  j++){
+					
+					if (lesBriques[i][j].state != 0){					
+						buffer.drawImage(lesBriques[i][j].image, lesBriques[i][j].x,lesBriques[i][j].y,this);
+					}
 				}
-            }
+			}
             buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
 		}
 			
