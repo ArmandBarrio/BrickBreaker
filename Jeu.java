@@ -21,7 +21,7 @@ public class Jeu extends JFrame implements ActionListener{
 	public long Temps;
     
     //Add the Object array
-    public Brick lesBriques[]= new Brick[2];
+    public Brick lesBriques[]= new Brick[4];
 
 	//Game Animation
 	public int NbVies = 3;
@@ -50,6 +50,9 @@ public class Jeu extends JFrame implements ActionListener{
     //Objets
     public Brick brique;
     public Brick brique1;
+    public Brick brique2;
+    public Brick brique3;
+    
     
     public Object Ball;
 	
@@ -72,9 +75,14 @@ public class Jeu extends JFrame implements ActionListener{
         // Pour tester les briques
         brique = new Brick ( 100, 100,"Unbreakable",-1);
         brique1 = new Brick ( 200, 200,"Normal",1);
+        brique2 = new Brick ( 200, 300,"Normal",2);
+        brique3= new Brick ( 200, 400,"Normal",3);
         lesBriques[0]=brique;
         lesBriques[1]=brique1;
-        Ball = new Object("Ball.png", 200,200, 0,0);
+        lesBriques[2]=brique2;
+        lesBriques[3]=brique3;
+        
+        Ball = new Object("Ball.png", 400,400, 0,0);
 
 		
 		//Make Window appear		

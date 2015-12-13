@@ -27,11 +27,11 @@ public class  Brick extends Object {
 			
 		if (Type == "Normal" && state > 0){
 			try {
-             image= ImageIO.read(new File("Brick"+state+".jpg"));
+             image= ImageIO.read(new File("Brick"+state+".png"));
              } 
          catch(Exception err) 
              {
-            System.out.println("Brick"+state+".jpg"+" introuvable !");            
+            System.out.println("Brick"+state+".png"+" introuvable !");            
             System.exit(0);    
             }
 		}
