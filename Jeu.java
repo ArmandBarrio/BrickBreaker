@@ -11,7 +11,17 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 // for Music
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
+//Listeners
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
 public class Jeu extends JFrame implements ActionListener{
 	
@@ -29,6 +39,7 @@ public class Jeu extends JFrame implements ActionListener{
 	public boolean ToucheDroite;
 	public boolean ToucheGauche;
 	public boolean ToucheEspace;	
+	public boolean ToucheEnter;
 	
 	//Wallpaper image and Rectangle
 	public Rectangle Ecran;
@@ -42,7 +53,7 @@ public class Jeu extends JFrame implements ActionListener{
 	int screenHeight;
 	
 	//Start Screen
-	boolean startScreen = false;
+	boolean startScreen = true;
     
     //Objets
     public Brick brique;
@@ -50,21 +61,58 @@ public class Jeu extends JFrame implements ActionListener{
 	//font
 	Font font;
 	
+	//KeyListener
+	//this.addKeyListener(new Jeu_this_keyAdapter(this));
+	
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
 	}
 	
+	private class Jeu_this_keyAdapter extends KeyAdapter {
+        private Jeu adaptee;
+
+        Jeu_this_keyAdapter(Jeu adaptee) {
+            this.adaptee = adaptee;
+        }
+
+        public void keyPressed(KeyEvent e) {
+            adaptee.this_keyPressed(e);
+        }
+
+        public void keyReleased(KeyEvent e) {
+            adaptee.this_keyReleased(e);
+        }
+    }
+	
+	public void this_keyPressed(KeyEvent e) {
+        int code = e.getKeyCode();
+        if (code == KeyEvent.VK_SPACE) ToucheEspace=true;
+                        else
+                if (code == KeyEvent.VK_LEFT) ToucheGauche=true;
+                                else
+                        if (code == KeyEvent.VK_RIGHT) ToucheDroit=true;
+                                        else
+                                if (code == KeyEvent.VK_ENTER)
+                                        if (Montimer.isRunning()) timer.stop();
+                                                      else     Montimer.start();
+                                                else
+                                            if (code == KeyEvent.VK_ESCAPE) System.exit(0);
+    }
+	
 	public Jeu(){
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-<<<<<<< HEAD
+
 		screenWidth = (int)(screenSize.getWidth());
 		screenHeight = (int)(screenSize.getHeight());
-=======
+
 		int screenWidth = (int)(screenSize.getWidth());
 		int screenHeight = (int)(screenSize.getHeight());
-        brique = new Brick ( 100, 100,"brick.jpg",0);
->>>>>>> e8e0020f4744723d130332ae954e9389be80de12
+        //brique = new Brick ( 100, 100,"brick.jpg",0);
+		
+		// temporary fix
+		brique = new Brick ( 100, 100,"Paddle.png",0);
+		
 		
 		//Make Window appear		
 		this.setTitle("Brick Breaker");
@@ -88,7 +136,7 @@ public class Jeu extends JFrame implements ActionListener{
 		
 		//ActionListener
 		Montimer = new Timer(TempsTimer_ms,this);	
-		Montimer.start();
+		//Started by Enter Key Montimer.start();
 		
 		
 		//Buffer and all
@@ -102,7 +150,7 @@ public class Jeu extends JFrame implements ActionListener{
 		// Font
 		 try{
 			font = Font.createFont(Font.TRUETYPE_FONT, new File("COMPUTER.TTF"));
-			buffer.setFont(font.deriveFont(40.0f));
+			buffer.setFont(font);
         } catch(Exception ex){
             System.out.println("Fonte COMPUTER.TTF non trouvée !");
         } 
@@ -120,6 +168,17 @@ public class Jeu extends JFrame implements ActionListener{
 	}
 	
 	public void music(){
+		
+		try{
+			AudioInputStream audioInputStream =
+			AudioSystem.getAudioInputStream(
+            this.getClass().getResource("Music.mp3"));
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		}catch(Exception ex){
+			System.out.println("No Music found");
+		}
 	}
 		
 	public void gestionPaddle(){
@@ -142,7 +201,8 @@ public class Jeu extends JFrame implements ActionListener{
 		
 		if(startScreen == true){
 			buffer.drawImage(startScreenWallpaper,0,0,this);
-			buffer.setFont(font); // StyleConstants.setFontSize(fontSize, 25)
+			//font.size = 200;
+			buffer.setFont(font); 
 			buffer.setColor(Color.white);
 			buffer.drawString("New Game?",100,(int)(screenHeight*0.3));
 			
