@@ -29,6 +29,9 @@ public class Jeu extends JFrame implements ActionListener{
 	public int TempsTimer_ms = 100;
 	public Timer Montimer;
 	public long Temps;
+    
+    //Add the Object array
+    public Brick lesBriques[][]= new Brick[12][3];
 
 	//Game Animation
 	public int NbVies = 3;
@@ -49,14 +52,20 @@ public class Jeu extends JFrame implements ActionListener{
     public Image brick;
 	
 	//Screen Dimension
-	int screenWidth;
-	int screenHeight;
+	public int screenWidth;
+	public int screenHeight;
 	
 	//Start Screen
-	boolean startScreen = true;
+	boolean startScreen = false;
     
     //Objets
     public Brick brique;
+    public Brick brique1;
+    public Brick brique2;
+    public Brick brique3;
+    
+    
+    public Object Ball;
 	
 	//font
 	Font font;
@@ -68,36 +77,6 @@ public class Jeu extends JFrame implements ActionListener{
 		Jeu Game = new Jeu();
 	}
 	
-	private class Jeu_this_keyAdapter extends KeyAdapter {
-        private Jeu adaptee;
-
-        Jeu_this_keyAdapter(Jeu adaptee) {
-            this.adaptee = adaptee;
-        }
-
-        public void keyPressed(KeyEvent e) {
-            adaptee.this_keyPressed(e);
-        }
-
-        public void keyReleased(KeyEvent e) {
-            adaptee.this_keyReleased(e);
-        }
-    }
-	
-	public void this_keyPressed(KeyEvent e) {
-        int code = e.getKeyCode();
-        if (code == KeyEvent.VK_SPACE) ToucheEspace=true;
-                        else
-                if (code == KeyEvent.VK_LEFT) ToucheGauche=true;
-                                else
-                        if (code == KeyEvent.VK_RIGHT) ToucheDroit=true;
-                                        else
-                                if (code == KeyEvent.VK_ENTER)
-                                        if (Montimer.isRunning()) timer.stop();
-                                                      else     Montimer.start();
-                                                else
-                                            if (code == KeyEvent.VK_ESCAPE) System.exit(0);
-    }
 	
 	public Jeu(){
 		
@@ -113,6 +92,32 @@ public class Jeu extends JFrame implements ActionListener{
 		// temporary fix
 		brique = new Brick ( 100, 100,"Paddle.png",0);
 		
+        
+        // Pour tester les briques
+        for (int i = 0; i < lesBriques.length; i++){
+			for (int j = 0 ; j< lesBriques[0].length; j++){
+				double r = Math.random();
+				String randomType = "Normal";
+				int randomState = (int)(Math.random()*3 +1);
+				if (r <0.2)  randomType = "Unbreakable";
+				if ( r > 0.7) randomType = "Normal";
+				lesBriques[i][j] = new Brick ( 10 + i * 70, 50 + j * 34, randomType, randomState );
+			}
+		}
+				
+        /*brique = new Brick ( 100, 100,"Unbreakable",-1);
+        brique1 = new Brick ( 200, 200,"Normal",1);
+        brique2 = new Brick ( 200, 300,"Normal",2);
+        brique3= new Brick ( 200, 400,"Normal",3);
+        lesBriques[0]=brique;
+        lesBriques[1]=brique1;
+        lesBriques[2]=brique2;
+        lesBriques[3]=brique3;
+        */
+        
+        Ball = new Object("Ball.png", 400,400, 0,0);
+
+
 		
 		//Make Window appear		
 		this.setTitle("Brick Breaker");
@@ -128,15 +133,23 @@ public class Jeu extends JFrame implements ActionListener{
 		Wallpaper = T.getImage("wallpaper.jpg");
 		startScreenWallpaper = T.getImage("StartScreen.jpg");
 		paddle = T.getImage("Paddle.png");
-        brick = T.getImage("Brick.jpg");
         
-
-		
-		//paddle = new Objet("navire.png", (int)(Ecran.width/2),(int)(Ecran.height/2),0,0);
 		
 		//ActionListener
 		Montimer = new Timer(TempsTimer_ms,this);	
+
 		//Started by Enter Key Montimer.start();
+		Montimer.start();
+        
+        // tests if there are collisions
+        for (int i = 0; i < lesBriques.length; i++){
+			for (int j = 0 ; j < lesBriques[0].length;  j++){
+				if (lesBriques[i][j].Collision(Ball) && lesBriques[i][j].state !=0){
+					lesBriques[i][j].state= lesBriques[i][j].state-1;
+				}
+            System.out.println( lesBriques[i][j].state);
+			}
+        }
 		
 		
 		//Buffer and all
@@ -217,7 +230,16 @@ public class Jeu extends JFrame implements ActionListener{
 		}else{
             
 			buffer.drawImage(Wallpaper,0,0,this);
-            buffer.drawImage(brique.image, brique.x,brique.y,this);
+			// afficher toutes les briques actives
+            for ( int i = 0; i< lesBriques.length; i++){
+				for (int j = 0 ; j < lesBriques[0].length;  j++){
+					
+					if (lesBriques[i][j].state != 0){					
+						buffer.drawImage(lesBriques[i][j].image, lesBriques[i][j].x,lesBriques[i][j].y,this);
+					}
+				}
+			}
+            buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
 		}
 			
 		g.drawImage(ArrierePlan,0,0,this);
