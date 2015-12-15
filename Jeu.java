@@ -11,7 +11,17 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 // for Music
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
+//Listeners
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
 public class Jeu extends JFrame implements ActionListener{
 	
@@ -32,6 +42,7 @@ public class Jeu extends JFrame implements ActionListener{
 	public boolean ToucheDroite;
 	public boolean ToucheGauche;
 	public boolean ToucheEspace;	
+	public boolean ToucheEnter;
 	
 	//Wallpaper image and Rectangle
 	public Rectangle Ecran;
@@ -41,8 +52,8 @@ public class Jeu extends JFrame implements ActionListener{
     public Image brick;
 	
 	//Screen Dimension
-	int screenWidth;
-	int screenHeight;
+	public int screenWidth;
+	public int screenHeight;
 	
 	//Start Screen
 	boolean startScreen = false;
@@ -59,9 +70,13 @@ public class Jeu extends JFrame implements ActionListener{
 	//font
 	Font font;
 	
+	//KeyListener
+	//this.addKeyListener(new Jeu_this_keyAdapter(this));
+	
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
 	}
+	
 	
 	public Jeu(){
 		
@@ -69,8 +84,14 @@ public class Jeu extends JFrame implements ActionListener{
 
 		screenWidth = (int)(screenSize.getWidth());
 		screenHeight = (int)(screenSize.getHeight());
+
 		int screenWidth = (int)(screenSize.getWidth());
 		int screenHeight = (int)(screenSize.getHeight());
+        //brique = new Brick ( 100, 100,"brick.jpg",0);
+		
+		// temporary fix
+		brique = new Brick ( 100, 100,"Paddle.png",0);
+		
         
         // Pour tester les briques
         for (int i = 0; i < lesBriques.length; i++){
@@ -96,6 +117,7 @@ public class Jeu extends JFrame implements ActionListener{
         
         Ball = new Object("Ball.png", 400,400, 0,0);
 
+
 		
 		//Make Window appear		
 		this.setTitle("Brick Breaker");
@@ -112,12 +134,11 @@ public class Jeu extends JFrame implements ActionListener{
 		startScreenWallpaper = T.getImage("StartScreen.jpg");
 		paddle = T.getImage("Paddle.png");
         
-
-		
-		//paddle = new Objet("navire.png", (int)(Ecran.width/2),(int)(Ecran.height/2),0,0);
 		
 		//ActionListener
 		Montimer = new Timer(TempsTimer_ms,this);	
+
+		//Started by Enter Key Montimer.start();
 		Montimer.start();
         
         // tests if there are collisions
@@ -142,7 +163,7 @@ public class Jeu extends JFrame implements ActionListener{
 		// Font
 		 try{
 			font = Font.createFont(Font.TRUETYPE_FONT, new File("COMPUTER.TTF"));
-			buffer.setFont(font.deriveFont(40.0f));
+			buffer.setFont(font);
         } catch(Exception ex){
             System.out.println("Fonte COMPUTER.TTF non trouvée !");
         } 
@@ -160,6 +181,17 @@ public class Jeu extends JFrame implements ActionListener{
 	}
 	
 	public void music(){
+		
+		try{
+			AudioInputStream audioInputStream =
+			AudioSystem.getAudioInputStream(
+            this.getClass().getResource("Music.mp3"));
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		}catch(Exception ex){
+			System.out.println("No Music found");
+		}
 	}
 		
 	public void gestionPaddle(){
@@ -182,7 +214,8 @@ public class Jeu extends JFrame implements ActionListener{
 		
 		if(startScreen == true){
 			buffer.drawImage(startScreenWallpaper,0,0,this);
-			buffer.setFont(font); // StyleConstants.setFontSize(fontSize, 25)
+			//font.size = 200;
+			buffer.setFont(font); 
 			buffer.setColor(Color.white);
 			buffer.drawString("New Game?",100,(int)(screenHeight*0.3));
 			
