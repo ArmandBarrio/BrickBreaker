@@ -45,7 +45,7 @@ public class Jeu extends JFrame implements ActionListener{
 	int screenHeight;
 	
 	//Start Screen
-	boolean startScreen = true;
+	boolean startScreen = false;
     
     //Objets
     public Brick brique;
