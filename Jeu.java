@@ -140,10 +140,15 @@ public class Jeu extends JFrame implements ActionListener{
 
 		//Started by Enter Key Montimer.start();
 		Montimer.start();
+		
+		Ball.move(Ecran);
+		
+        //Call the method Ball.bounce(object) for the walls and the paddle
         
-        // tests if there are collisions
+        // tests if there are collisions. CAREFUL : this should be among the last instructions since it will change the direction
         for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j < lesBriques[0].length;  j++){
+				Ball.bounce(lesBriques[i][j]);		// if the ball collides with one of them, it changes direction
 				if (lesBriques[i][j].Collision(Ball) && lesBriques[i][j].state !=0){
 					lesBriques[i][j].state= lesBriques[i][j].state-1;
 				}
