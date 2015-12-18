@@ -23,7 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-public class Jeu extends JFrame implements ActionListener{
+public class Jeu extends JFrame implements ActionListener,KeyListener{
 	
 	//Add Timer
 	public int TempsTimer_ms = 100;
@@ -39,10 +39,11 @@ public class Jeu extends JFrame implements ActionListener{
 	public Graphics buffer;
 	
 	//Key booleans
-	public boolean ToucheDroite;
-	public boolean ToucheGauche;
-	public boolean ToucheEspace;	
-	public boolean ToucheEnter;
+	public boolean toucheDroite;
+	public boolean toucheGauche;
+	public boolean toucheEspace;	
+	public boolean toucheEnter;
+	public boolean toucheEchap;
 	
 	//Wallpaper image and Rectangle
 	public Rectangle Ecran;
@@ -76,7 +77,6 @@ public class Jeu extends JFrame implements ActionListener{
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
 	}
-	
 	
 	public Jeu(){
 		
@@ -137,6 +137,7 @@ public class Jeu extends JFrame implements ActionListener{
 		
 		//ActionListener
 		Montimer = new Timer(TempsTimer_ms,this);	
+		Montimer.start();
 
 		//Started by Enter Key Montimer.start();
 		Montimer.start();
@@ -158,6 +159,9 @@ public class Jeu extends JFrame implements ActionListener{
 		
 		//play music (doesn't work yet)
 		music();
+		
+		//KeyListener
+		addKeyListener(this);
 			
 			
 		// Font
@@ -177,6 +181,8 @@ public class Jeu extends JFrame implements ActionListener{
 			long s = Temps/(long)(10);
 			this.setTitle("Time : " + String.valueOf(s) + "   |  Lives "+ String.valueOf(NbVies));
 			Temps++;
+			gestionBall();
+			repaint();
 			
 	}
 	
@@ -206,11 +212,81 @@ public class Jeu extends JFrame implements ActionListener{
 	
 	public void gestionBall(){
 		
-		
 	}
-				
-	public void paint(Graphics g){
 		
+	public void keyTyped(KeyEvent e) { }
+         
+    public void keyPressed(KeyEvent e){
+
+        if(e.getKeyCode()==KeyEvent.VK_LEFT){
+            toucheGauche=true;
+            System.out.println("Left pressed");
+        }
+        if(e.getKeyCode()==KeyEvent.VK_RIGHT){
+            toucheDroite=true;
+            System.out.println("Right pressed");
+        }
+        if(e.getKeyCode()==KeyEvent.VK_SPACE){
+            toucheEspace=true;
+            System.out.println("Space pressed");
+        }
+        if(e.getKeyCode()==KeyEvent.VK_ENTER){
+           /* if (Montimer.isRunning() == false){
+                
+            }*/
+            Montimer.start();
+            System.out.println("Enter pressed");
+        }
+        if(e.getKeyCode()==KeyEvent.VK_ESCAPE){
+            toucheEchap=true;
+            System.exit(0);
+        }
+        
+       /* if(e.getKeyCode()==KeyEvent.VK_1){
+            choice = 0;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_2){
+            choice = 1;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_3){
+            choice = 2;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_4){
+            choice = 3;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_5){
+            choice = 4;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_6){
+            choice = 5;
+        }        
+        */
+    }
+     
+    public void keyReleased(KeyEvent e){
+        /*if(e.getKeyCode()==KeyEvent.VK_UP){
+            upKey=false;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_DOWN){
+            downKey=false;
+        }
+        */
+        if(e.getKeyCode()==KeyEvent.VK_LEFT){
+            toucheGauche=false;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_RIGHT){
+            toucheDroite=false;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_SPACE){
+            toucheEspace=false;
+        }
+        if(e.getKeyCode()==KeyEvent.VK_ESCAPE){
+            toucheEchap=false;
+        }
+        //useful?
+    }
+
+	public void paint(Graphics g){
 		
 		if(startScreen == true){
 			buffer.drawImage(startScreenWallpaper,0,0,this);
