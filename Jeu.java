@@ -114,7 +114,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         upperWall = new Object ( "HorizontalWall.png" , 10,10, 0,0);
         
         // Create the Paddle
-        Paddle = new Object ( "Paddle.png", 400,800,10,0);
+        Paddle = new Object ( "Paddle.png", 400,800,10,100);
         
         
 				
@@ -173,6 +173,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         } catch(Exception ex){
             System.out.println("Fonte COMPUTER.TTF non trouvée !");
         } 
+        
+        //Paddle
+        
 		
 		this.setVisible(true);
 		repaint();
@@ -184,6 +187,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 			this.setTitle("Time : " + String.valueOf(s) + "   |  Lives "+ String.valueOf(NbVies));
 			Temps++;
 			gestionBall();
+			gestionPaddle();
 			repaint();
 			
 	}
@@ -203,8 +207,12 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	}
 		
 	public void gestionPaddle(){
-			
-			
+		if (toucheDroite==true){
+			Paddle.x=Paddle.x+(int)(Paddle.vitesse); 
+		}
+		if (toucheGauche==true){
+			Paddle.x=Paddle.x-(int)(Paddle.vitesse); 
+		}
 	}
 				
 	public void gestionBricks(){
@@ -339,6 +347,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				}
 			}
             buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
+            buffer.drawImage(Paddle.image, Paddle.x, Paddle.y,this);	
 		}
 			
 		g.drawImage(ArrierePlan,0,0,this);
