@@ -93,7 +93,7 @@ public class Jeu extends JFrame implements ActionListener{
 		brique = new Brick ( 100, 100,"Paddle.png",0);
 		
         
-        // Pour tester les briques
+        // Pour tester les briques, initialisation
         for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j< lesBriques[0].length; j++){
 				double r = Math.random();
@@ -141,23 +141,7 @@ public class Jeu extends JFrame implements ActionListener{
 		//Started by Enter Key Montimer.start();
 		Montimer.start();
 		
-		Ball.move(Ecran);
-		
-        //Call the method Ball.bounce(object) for the walls and the paddle
-        
-        // tests if there are collisions. CAREFUL : this should be among the last instructions since it will change the direction
-        for (int i = 0; i < lesBriques.length; i++){
-			for (int j = 0 ; j < lesBriques[0].length;  j++){
-				Ball.bounce(lesBriques[i][j]);		// if the ball collides with one of them, it changes direction
-				if (lesBriques[i][j].Collision(Ball) && lesBriques[i][j].state !=0){
-					lesBriques[i][j].state= lesBriques[i][j].state-1;
-				}
-            System.out.println( lesBriques[i][j].state);
-			}
-        }
-		
-		
-		//Buffer and all
+        //Buffer and all
 		ArrierePlan = new BufferedImage(Ecran.width,Ecran.height,BufferedImage.TYPE_INT_RGB);
 		buffer = ArrierePlan.getGraphics();
 		
@@ -205,11 +189,32 @@ public class Jeu extends JFrame implements ActionListener{
 	}
 				
 	public void gestionBricks(){
+        // tests if there are collisions. 
+        for (int i = 0; i < lesBriques.length; i++){
+			for (int j = 0 ; j < lesBriques[0].length;  j++){
+				if (lesBriques[i][j].Collision(Ball) && lesBriques[i][j].state !=0){
+					lesBriques[i][j].state= lesBriques[i][j].state-1;
+				}
+            System.out.println( lesBriques[i][j].state);
+			}
+        }
 			
 			
 	}
 	
 	public void gestionBall(){
+        Ball.move(Ecran);
+        for (int i = 0; i < lesBriques.length; i++){
+			for (int j = 0 ; j < lesBriques[0].length;  j++){
+                Ball.bounce(lesBriques[i][j]);
+            }
+        }
+        Ball.bounce(upperWall);
+        Ball.bounce(leftWall);
+        Ball.bounce(rightWall);
+        Ball.bounce(Paddle);
+                
+        
 		
 		
 	}
