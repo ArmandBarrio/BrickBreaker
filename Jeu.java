@@ -105,13 +105,13 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				int randomState = (int)(Math.random()*3 +1);
 				if (r <0.2)  randomType = "Unbreakable";
 				if ( r > 0.7) randomType = "Normal";
-				lesBriques[i][j] = new Brick ( 10 + i * 70, 50 + j * 34, randomType, randomState );
+				lesBriques[i][j] = new Brick ( 100 + i * 70, 200+j * 34, randomType, randomState );
 			}
 		}
         // Pour créer les murs
-        leftWall = new Object ( "VerticalWall.png" , 10,10, 0,0);
-        rightWall = new Object ( "VerticalWall.png" , lesBriques.length * 70,10, 0,0);
-        upperWall = new Object ( "HorizontalWall.png" , 10,10, 0,0);
+        leftWall = new Object ( "VerticalWall.png" , 10000,10, 0,0);
+        rightWall = new Object ( "VerticalWall.png" , 100000+lesBriques.length * 70,10, 0,0);
+        upperWall = new Object ( "HorizontalWall.png" , 100000,10, 0,0);
         
         // Create the Paddle
         Paddle = new Object ( "Paddle.png", 400,800,10,0);
@@ -128,7 +128,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         lesBriques[3]=brique3;
         */
         
-        Ball = new Object("Ball.png", 400,400, 0,0);
+        Ball = new Object("Ball.png", 100,800,(float) (3*Math.PI/2),10);
 
 
 		
@@ -162,6 +162,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		//play music (doesn't work yet)
 		music();
 		
+
+        
+        
 		//KeyListener
 		addKeyListener(this);
 			
@@ -183,7 +186,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 			long s = Temps/(long)(10);
 			this.setTitle("Time : " + String.valueOf(s) + "   |  Lives "+ String.valueOf(NbVies));
 			Temps++;
-			gestionBall();
+            gestionBall();
+            gestionPaddle();
+            gestionBricks();
+            System.out.println( leftWall.x);
+            
 			repaint();
 			
 	}
@@ -203,6 +210,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	}
 		
 	public void gestionPaddle(){
+        Paddle.move ( Ecran);
 			
 			
 	}
@@ -225,7 +233,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         Ball.move(Ecran);
         for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j < lesBriques[0].length;  j++){
-                Ball.bounce(lesBriques[i][j]);
+                if( lesBriques[i][j].state != 0){
+                    Ball.bounce(lesBriques[i][j]);
+                }
             }
         }
         Ball.bounce(upperWall);
@@ -336,9 +346,14 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 					if (lesBriques[i][j].state != 0){					
 						buffer.drawImage(lesBriques[i][j].image, lesBriques[i][j].x,lesBriques[i][j].y,this);
 					}
+                    
 				}
 			}
             buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
+            buffer.drawImage(leftWall.image, leftWall.x,leftWall.y,this);
+            buffer.drawImage(rightWall.image, rightWall.x,rightWall.y,this);
+            buffer.drawImage(upperWall.image, upperWall.x,upperWall.y,this);
+            buffer.drawImage(Paddle.image, Paddle.x,Paddle.y,this);
 		}
 			
 		g.drawImage(ArrierePlan,0,0,this);
