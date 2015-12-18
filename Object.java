@@ -57,6 +57,27 @@ public class  Object {
     boolean Collision(Object O) {
         return BoxObject.intersects(O.BoxObject); 
     }
+    void bounce (Object O){			// this only works if the dimension of the objects are greater than speed...
+		if (this.Collision(O)){
+			if (this.x > O.x && this.x < ( O.x = O.l) && this.y > O.y && this.y < ( O.y = O.h)){
+				if (this.direction< Math.PI*2 ){
+					this.direction  = (float)(2*Math.PI-this.direction);
+				}
+				if ( this.direction>3*Math.PI/2){
+					this.direction = (float)(3*Math.PI- this.direction);
+				}
+			}
+				// then for the most difficult configuration, define the last position of the "ball" and define the collision point
+				//to clearly know on which side the ball bounces
+				
+			if( this.x < O.x && this.y > O.y){		//the "ball" arrives on the left side
+				this.direction  = (float)(2*Math.PI-this.direction);
+			}
+			if ( this.x >O.x && this.y < O.y){		// the "ball" arrives on the upper side
+				this.direction  =(float)( Math.PI-this.direction);
+			}
+		}
+	}
         
     
     public void move(Rectangle Ecran) {
