@@ -120,7 +120,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         upperWall = new Object ( "HorizontalWall.png" , 100000,10, 0,0);
         
         // Create the Paddle
-        Paddle = new Object ( "Paddle.png", 400,800,10,100);
+        Paddle = new Object ( "Paddle.png", 400,800,10,10);
         
         
 				
@@ -200,17 +200,16 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				this.setTitle("Time : " + String.valueOf(s-gameStartTime) + "   |  Lives "+ String.valueOf(NbVies));
 			}
 			Temps++;
-<<<<<<< HEAD
+
             gestionBall();
             gestionPaddle();
             gestionBricks();
             System.out.println( leftWall.x);
             
-=======
 			startScreenAction();
 			gestionBall();
 			gestionPaddle();
->>>>>>> 931e497343294f0e7929f43283ee43defc122cc4
+			
 			repaint();
 			
 	}
@@ -240,18 +239,13 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	}
 		
 	public void gestionPaddle(){
-<<<<<<< HEAD
-        Paddle.move ( Ecran);
-			
-			
-=======
+		
 		if (toucheDroite==true){
 			Paddle.x=Paddle.x+(int)(Paddle.vitesse); 
 		}
 		if (toucheGauche==true){
-			Paddle.x=Paddle.x-(int)(Paddle.vitesse); 
-		}
->>>>>>> 931e497343294f0e7929f43283ee43defc122cc4
+			Paddle.x=Paddle.x-(int)(Paddle.vitesse);
+		} 
 	}
 				
 	public void gestionBricks(){
@@ -407,18 +401,14 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				}
 			}
             buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
-<<<<<<< HEAD
+
             buffer.drawImage(leftWall.image, leftWall.x,leftWall.y,this);
             buffer.drawImage(rightWall.image, rightWall.x,rightWall.y,this);
             buffer.drawImage(upperWall.image, upperWall.x,upperWall.y,this);
             buffer.drawImage(Paddle.image, Paddle.x,Paddle.y,this);
-=======
-<<<<<<< HEAD
-            buffer.drawImage(paddle,(int)(screenHeight*0.9),(int)(screenWidth*0.5 - paddleWidth/2),paddleWidth,paddleHeight,this);
-=======
-            buffer.drawImage(Paddle.image, Paddle.x, Paddle.y,this);	
->>>>>>> 68341d4ec9943dda6f611a256008eb6cc10dde95
->>>>>>> 931e497343294f0e7929f43283ee43defc122cc4
+
+           buffer.drawImage(paddle,Paddle.x,(int)(screenHeight*0.9),paddleWidth,paddleHeight,this);	
+
 		}
 			
 		g.drawImage(ArrierePlan,0,0,this);
