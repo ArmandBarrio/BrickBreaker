@@ -63,6 +63,10 @@ public class Jeu extends JFrame implements ActionListener{
     public Brick brique1;
     public Brick brique2;
     public Brick brique3;
+    public Object upperWall;
+    public Object leftWall;
+    public Object rightWall;
+    public Object Paddle;
     
     
     public Object Ball;
@@ -104,6 +108,15 @@ public class Jeu extends JFrame implements ActionListener{
 				lesBriques[i][j] = new Brick ( 10 + i * 70, 50 + j * 34, randomType, randomState );
 			}
 		}
+        // Pour créer les murs
+        leftWall = new Object ( "VerticalWall.png" , 10,10, 0,0);
+        rightWall = new Object ( "VerticalWall.png" , lesBriques.length * 70,10, 0,0);
+        upperWall = new Object ( "HorizontalWall.png" , 10,10, 0,0);
+        
+        // Create the Paddle
+        Paddle = new Object ( "Paddle.png", 400,800,10,0);
+        
+        
 				
         /*brique = new Brick ( 100, 100,"Unbreakable",-1);
         brique1 = new Brick ( 200, 200,"Normal",1);
