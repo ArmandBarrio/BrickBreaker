@@ -26,7 +26,7 @@ import java.awt.image.BufferedImage;
 public class Jeu extends JFrame implements ActionListener,KeyListener{
 	
 	//Add Timer
-	public int TempsTimer_ms = 100;
+	public int TempsTimer_ms = 10;
 	public Timer Montimer;
 	public long Temps;
 	public long s;
@@ -65,7 +65,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	public int paddleHeight = 30;
 	
 	//Start Screen
-	boolean startScreen = true;
+	boolean startScreen = false;
     boolean arrowUp = true;
     
     //Objets
@@ -83,9 +83,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	
 	//font
 	Font font;
-	
-	//KeyListener
-	//this.addKeyListener(new Jeu_this_keyAdapter(this));
 	
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
@@ -134,7 +131,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         lesBriques[3]=brique3;
         */
         
-        Ball = new Object("Ball.png", 100,800,(float) (3*Math.PI/2),10);
+        Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (300*Math.PI*2.0/360.0),2);
 
 
 		
@@ -152,10 +149,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		Wallpaper = T.getImage("wallpaper.jpg");
 		startScreenWallpaper = T.getImage("StartScreen.jpg");
 		paddle = T.getImage("Paddle.png");
-		
-		//trying this out to resize
-			paddle.getScaledInstance(200, 50, Image.SCALE_DEFAULT);
-
 		
 		//ActionListener
 		Montimer = new Timer(TempsTimer_ms,this);	
@@ -186,8 +179,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
             System.out.println("Fonte COMPUTER.TTF non trouvée !");
         } 
         
-        //Paddle
-        
 		
 		this.setVisible(true);
 		repaint();
@@ -195,20 +186,22 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		
 	public void actionPerformed(ActionEvent e){
 			
-			s = Temps/(long)(10);
+			s = Temps/(long)(100);
 			if (!startScreen){
 				this.setTitle("Time : " + String.valueOf(s-gameStartTime) + "   |  Lives "+ String.valueOf(NbVies));
 			}
 			Temps++;
-
+			
+			startScreenAction();
+            
             gestionBall();
             gestionPaddle();
             gestionBricks();
-            System.out.println( leftWall.x);
-            
-			startScreenAction();
-			gestionBall();
-			gestionPaddle();
+			
+			if(Temps%50 == 0){
+				//System.out.println(Paddle.x + "   " + Paddle.y + "  | " + Ball.x + "   " + Ball.y +  "     " +  richtung + "  |  " + Ball.direction);
+			}
+			
 			
 			repaint();
 			
@@ -255,7 +248,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				if (lesBriques[i][j].Collision(Ball) && lesBriques[i][j].state !=0){
 					lesBriques[i][j].state= lesBriques[i][j].state-1;
 				}
-            System.out.println( lesBriques[i][j].state);
+            //System.out.println( lesBriques[i][j].state);
 			}
         }
 			
@@ -338,13 +331,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
     }
      
     public void keyReleased(KeyEvent e){
-        /*if(e.getKeyCode()==KeyEvent.VK_UP){
-            upKey=false;
-        }
-        if(e.getKeyCode()==KeyEvent.VK_DOWN){
-            downKey=false;
-        }
-        */
+
         if(e.getKeyCode()==KeyEvent.VK_LEFT){
             toucheGauche=false;
         }

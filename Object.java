@@ -13,6 +13,7 @@ public class  Object {
     // Attributs 
     int x,y;                
     int h,l;                
+    double trueX, trueY;
     float direction;        
     float vitesse;          
     BufferedImage image;    
@@ -33,35 +34,37 @@ public class  Object {
         
         h= image.getHeight(null);   
         l= image.getWidth(null);        
-        x=ax;   
+        x=ax;
+        trueX = ax;   
         y=ay;
+        trueY = ay;
         BoxObject = new Rectangle(x,y,l,h);
         direction=ad;
         vitesse=av; 
         actif=true;
         
     }
-    public Object( int ax, int ay, float ad, float av)    {
-         
-        
-        
-             
-        x=ax;   
+    public Object( int ax, int ay, float ad, float av)    {      
+        x=ax;
+        trueX = ax;   
         y=ay;
+        trueY = ay;
         direction=ad;
         vitesse=av; 
         actif=true;
-        
     }
     
     boolean Collision(Object O) {
         return BoxObject.intersects(O.BoxObject); 
     }
-    void bounce (Object O){			// this only works if the dimension of the objects are greater than speed...
+    
+    void bounce (Object O){			
+		// this only works if the dimension of the objects are greater than speed...
 		if (this.Collision(O)){
 			if (this.x > O.x && this.x < ( O.x = O.l) && this.y > O.y && this.y < ( O.y = O.h)){
 				if (this.direction< Math.PI*2 ){
 					this.direction  = (float)(2*Math.PI-this.direction);
+					
 				}
 				if ( this.direction>3*Math.PI/2){
 					this.direction = (float)(3*Math.PI- this.direction);
@@ -77,12 +80,19 @@ public class  Object {
 				this.direction  =(float)( Math.PI-this.direction);
 			}
 		}
+		if (this.Collision(O)){
+			direction = (float)(direction +2 *(Math.PI - direction));
+		}
 	}
-        
+        void bounceOffPaddle(Object O){
+			
+		}
     
     public void move(Rectangle Ecran) {
-        x=x+(int)(vitesse*Math.cos(direction)); 
-        y=y+(int)(vitesse*Math.sin(direction));
+        trueX = trueX + vitesse*Math.cos(direction); 
+        trueY = trueY + vitesse*Math.sin(direction);
+        x = (int)(trueX);
+        y = (int)(trueY);
         
         BoxObject.setLocation(x,y);
         
