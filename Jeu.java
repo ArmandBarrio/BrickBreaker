@@ -73,6 +73,10 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
     public Brick brique1;
     public Brick brique2;
     public Brick brique3;
+    public Object upperWall;
+    public Object leftWall;
+    public Object rightWall;
+    public Object Paddle;
     
     
     public Object Ball;
@@ -99,7 +103,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		
 		
         
-        // Pour tester les briques
+        // Pour tester les briques, initialisation
         for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j< lesBriques[0].length; j++){
 				double r = Math.random();
@@ -110,6 +114,15 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				lesBriques[i][j] = new Brick ( 10 + i * 70, 50 + j * 34, randomType, randomState );
 			}
 		}
+        // Pour créer les murs
+        leftWall = new Object ( "VerticalWall.png" , 10,10, 0,0);
+        rightWall = new Object ( "VerticalWall.png" , lesBriques.length * 70,10, 0,0);
+        upperWall = new Object ( "HorizontalWall.png" , 10,10, 0,0);
+        
+        // Create the Paddle
+        Paddle = new Object ( "Paddle.png", 400,800,10,100);
+        
+        
 				
         /*brique = new Brick ( 100, 100,"Unbreakable",-1);
         brique1 = new Brick ( 200, 200,"Normal",1);
@@ -151,23 +164,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		//Started by Enter Key Montimer.start();
 		Montimer.start();
 		
-		Ball.move(Ecran);
-		
-        //Call the method Ball.bounce(object) for the walls and the paddle
-        
-        // tests if there are collisions. CAREFUL : this should be among the last instructions since it will change the direction
-        for (int i = 0; i < lesBriques.length; i++){
-			for (int j = 0 ; j < lesBriques[0].length;  j++){
-				Ball.bounce(lesBriques[i][j]);		// if the ball collides with one of them, it changes direction
-				if (lesBriques[i][j].Collision(Ball) && lesBriques[i][j].state !=0){
-					lesBriques[i][j].state= lesBriques[i][j].state-1;
-				}
-            System.out.println( lesBriques[i][j].state);
-			}
-        }
-		
-		
-		//Buffer and all
+        //Buffer and all
 		ArrierePlan = new BufferedImage(Ecran.width,Ecran.height,BufferedImage.TYPE_INT_RGB);
 		buffer = ArrierePlan.getGraphics();
 		
@@ -185,6 +182,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         } catch(Exception ex){
             System.out.println("Fonte COMPUTER.TTF non trouvée !");
         } 
+        
+        //Paddle
+        
 		
 		this.setVisible(true);
 		repaint();
@@ -199,6 +199,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 			Temps++;
 			startScreenAction();
 			gestionBall();
+			gestionPaddle();
 			repaint();
 			
 	}
@@ -228,16 +229,41 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	}
 		
 	public void gestionPaddle(){
-			
-			
+		if (toucheDroite==true){
+			Paddle.x=Paddle.x+(int)(Paddle.vitesse); 
+		}
+		if (toucheGauche==true){
+			Paddle.x=Paddle.x-(int)(Paddle.vitesse); 
+		}
 	}
 				
 	public void gestionBricks(){
+        // tests if there are collisions. 
+        for (int i = 0; i < lesBriques.length; i++){
+			for (int j = 0 ; j < lesBriques[0].length;  j++){
+				if (lesBriques[i][j].Collision(Ball) && lesBriques[i][j].state !=0){
+					lesBriques[i][j].state= lesBriques[i][j].state-1;
+				}
+            System.out.println( lesBriques[i][j].state);
+			}
+        }
 			
 			
 	}
 	
 	public void gestionBall(){
+        Ball.move(Ecran);
+        for (int i = 0; i < lesBriques.length; i++){
+			for (int j = 0 ; j < lesBriques[0].length;  j++){
+                Ball.bounce(lesBriques[i][j]);
+            }
+        }
+        Ball.bounce(upperWall);
+        Ball.bounce(leftWall);
+        Ball.bounce(rightWall);
+        Ball.bounce(Paddle);
+                
+        
 		
 	}
 		
@@ -361,7 +387,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				}
 			}
             buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
+<<<<<<< HEAD
             buffer.drawImage(paddle,(int)(screenHeight*0.9),(int)(screenWidth*0.5 - paddleWidth/2),paddleWidth,paddleHeight,this);
+=======
+            buffer.drawImage(Paddle.image, Paddle.x, Paddle.y,this);	
+>>>>>>> 68341d4ec9943dda6f611a256008eb6cc10dde95
 		}
 			
 		g.drawImage(ArrierePlan,0,0,this);
