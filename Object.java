@@ -60,7 +60,7 @@ public class  Object {
     
     void bounce (Object O){			
 		// this only works if the dimension of the objects are greater than speed...
-		if (this.Collision(O)){
+		/*if (this.Collision(O)){
 			if (this.x > O.x && this.x < ( O.x = O.l) && this.y > O.y && this.y < ( O.y = O.h)){
 				if (this.direction< Math.PI*2 ){
 					this.direction  = (float)(2*Math.PI-this.direction);
@@ -79,14 +79,46 @@ public class  Object {
 			if ( this.x >O.x && this.y < O.y){		// the "ball" arrives on the upper side
 				this.direction  =(float)( Math.PI-this.direction);
 			}
-		}
+		} */
 		if (this.Collision(O)){
 			direction = (float)(direction +2 *(Math.PI - direction));
+			System.out.println("Collision with object " + O );
 		}
 	}
-        void bounceOffPaddle(Object O){
-			
+        void bounceOffPaddle(int ax, int ay, int length){
+			if(y >= ay-h && x >= ax && x<=ax + length){
+				//For no interaction between the paddle and the ball
+				//direction = (float)(2 *(Math.PI) - direction);	
+				
+				//more complexe ball orientation through paddle collision								
+				direction= (float) (270*Math.PI*2.0/360.0 - ((ax +length/2.0)-x)/(length/2.0) * 50.0*Math.PI*2.0/360.0);
+				//System.out.println("Collision with PADDLE ");
+			}
+
+		}       
+		
+		void bounceOffWalls(int screenW, int screenH){
+			if (y <= h ){ 
+				direction = (float)(2 *(Math.PI) - direction);
+				//System.out.println("Collision with TOP wall" );
+			}
+			if (x< 0){ 
+				direction = (float)(Math.PI - direction);
+				//System.out.println("Collision with LEFT wall" );
+			}
+			if (x > screenW - l ){ 
+				direction = (float)(Math.PI - direction);
+				//System.out.println("Collision with RIGHT wall" );
+			}
+			//This will have to dissapear
+			if (y >=  screenH - l ){
+				direction = (float)(direction +2 *(Math.PI - direction));
+				//System.out.println("Collision with BOTTOM wall" );
+			}
 		}
+
+		
+
     
     public void move(Rectangle Ecran) {
         trueX = trueX + vitesse*Math.cos(direction); 
