@@ -181,7 +181,8 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
             gestionBricks();
 			
 			if(Temps%50 == 0){
-				System.out.println(Paddle.x + "   "  +  Ball.x +"  | " + Paddle.y +"   " + Ball.y );
+				// To determine positions every so seconds
+				//System.out.println(Paddle.x + "   "  +  Ball.x +"  | " + Paddle.y +"   " + Ball.y );
 			}
 			
 			
@@ -215,10 +216,10 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		
 	public void gestionPaddle(){
 		
-		if (toucheDroite==true){
+		if (toucheDroite==true && Paddle.x < screenWidth-paddleWidth){
 			Paddle.x=Paddle.x+(int)(Paddle.vitesse); 
 		}
-		if (toucheGauche==true){
+		if (toucheGauche==true && Paddle.x > 0){
 			Paddle.x=Paddle.x-(int)(Paddle.vitesse);
 		} 
 	}
