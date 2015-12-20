@@ -26,7 +26,7 @@ import java.awt.image.BufferedImage;
 public class Jeu extends JFrame implements ActionListener,KeyListener{
 	
 	//Add Timer
-	public int TempsTimer_ms = 10;
+	public int TempsTimer_ms = 1;
 	public Timer Montimer;
 	public long Temps;
 	public long s;
@@ -105,7 +105,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				double r = Math.random();
 				String randomType = "Normal";
 				int randomState = (int)(Math.random()*3 +1);
-				if (r <0.2)  randomType = "Unbreakable";
+				if (r < 0.2)  randomType = "Unbreakable";
 				if ( r > 0.7) randomType = "Normal";
 				lesBriques[i][j] = new Brick ( 100 + i * 70, 200+j * 34, randomType, randomState );
 			}
@@ -116,8 +116,8 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         upperWall = new Object ( "HorizontalWall.png" , 100000,10, 0,0);
         
         // Create the Paddle and Ball
-        Paddle = new Object ( "Paddle.png", 400,(int)(screenHeight*0.9),10,10);        
-        Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (270*Math.PI*2.0/360.0),10);
+        Paddle = new Object ( "Paddle.png", 400,(int)(screenHeight*0.9),10,10/TempsTimer_ms);        
+        Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (270*Math.PI*2.0/360.0),10/TempsTimer_ms);
 
 
 		
@@ -173,12 +173,13 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				this.setTitle("Time : " + String.valueOf(s-gameStartTime) + "   |  Lives "+ String.valueOf(NbVies));
 			}
 			Temps++;
-			
-			startScreenAction();
-            
-            gestionBall();
-            gestionPaddle();
-            gestionBricks();
+			if (startScreen){
+				startScreenAction();
+			}else{
+				gestionBall();
+				//gestionBricks done by gestionBall
+				gestionPaddle();
+			}
 			
 			if(Temps%50 == 0){
 				// To determine positions every so seconds
@@ -191,11 +192,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	}
 	
 	public void startScreenAction(){
-		if (startScreen && arrowUp && toucheEnter){
+		if (arrowUp && toucheEnter){
 			startScreen = false;
 			gameStartTime = s;
 		}
-		if (startScreen && !arrowUp && toucheEnter){
+		if (!arrowUp && toucheEnter){
 			System.exit(0);
 		}
 	}
@@ -223,23 +224,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 			Paddle.x=Paddle.x-(int)(Paddle.vitesse);
 		} 
 	}
-				
-	public void gestionBricks(){
-        // tests if there are collisions. 
-        for (int i = 0; i < lesBriques.length; i++){
-			for (int j = 0 ; j < lesBriques[0].length;  j++){
-				if (lesBriques[i][j].Collision(Ball) && lesBriques[i][j].state !=0){
-					lesBriques[i][j].state= lesBriques[i][j].state-1;
-				}
-            //System.out.println( lesBriques[i][j].state);
-			}
-        }
-			
-			
-	}
 	
 	public void gestionBall(){
+		
         Ball.move(Ecran);
+        
         for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j < lesBriques[0].length;  j++){
                 if( lesBriques[i][j].state != 0){
@@ -247,14 +236,10 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
                 }
             }
         }
-        //Ball.bounce(upperWall);
-        //Ball.bounce(leftWall);
-        //Ball.bounce(rightWall);
         
         Ball.bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth);
         Ball.bounceOffWalls(screenWidth, screenHeight);
-                
-        
+   
 		
 	}
 		
@@ -368,7 +353,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 					if (lesBriques[i][j].state != 0){					
 						buffer.drawImage(lesBriques[i][j].image, lesBriques[i][j].x,lesBriques[i][j].y,this);
 					}
-                    
 				}
 			}
 			
@@ -377,7 +361,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
             buffer.drawImage(leftWall.image, leftWall.x,leftWall.y,this);
             buffer.drawImage(rightWall.image, rightWall.x,rightWall.y,this);
             buffer.drawImage(upperWall.image, upperWall.x,upperWall.y,this);
-            buffer.drawImage(Paddle.image, Paddle.x,Paddle.y,paddleWidth,paddleHeight,this);
+            buffer.drawImage(Paddle.image, Paddle.x, Paddle.y, paddleWidth, paddleHeight, this);
 ;	
 
 		}

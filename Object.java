@@ -58,31 +58,51 @@ public class  Object {
         return BoxObject.intersects(O.BoxObject); 
     }
     
-    void bounce (Object O){			
-		// this only works if the dimension of the objects are greater than speed...
-		/*if (this.Collision(O)){
-			if (this.x > O.x && this.x < ( O.x = O.l) && this.y > O.y && this.y < ( O.y = O.h)){
-				if (this.direction< Math.PI*2 ){
-					this.direction  = (float)(2*Math.PI-this.direction);
-					
-				}
-				if ( this.direction>3*Math.PI/2){
-					this.direction = (float)(3*Math.PI- this.direction);
-				}
-			}
-				// then for the most difficult configuration, define the last position of the "ball" and define the collision point
-				//to clearly know on which side the ball bounces
-				
-			if( this.x < O.x && this.y > O.y){		//the "ball" arrives on the left side
-				this.direction  = (float)(2*Math.PI-this.direction);
-			}
-			if ( this.x >O.x && this.y < O.y){		// the "ball" arrives on the upper side
-				this.direction  =(float)( Math.PI-this.direction);
-			}
-		} */
-		if (this.Collision(O)){
-			direction = (float)(direction +2 *(Math.PI - direction));
-			System.out.println("Collision with object " + O );
+    void bounce (Brick O){				
+		
+		/*Armand : To try to fix this problem, I created the nextX and nextY functions
+		 * Did not work that well
+		
+		int ax = this.nextX();
+		int ay = this.nextY();
+		
+		if (ax>= O.x && ax<= (O.x + O.l -l) && ay <=(O.y + O.h) && ay >(O.y + O.h/2)){ 
+			direction = (float)(2 *(Math.PI) - direction);
+			System.out.println("Collision with BOTTOM OF BRICK" );
+		}
+		if (ax>= O.x && ax<= (O.x + O.l -l) && ay >=(O.y - h) && ay <(O.y -h + O.h/2)){ 
+			direction = (float)(2 *(Math.PI) - direction);
+			System.out.println("Collision with TOP OF BRICK" );
+		}
+		if (ax>= O.x && ax<= (O.x + O.l/2) && ay >=(O.y -h) && ay <(O.y -h + O.h)){ 
+			direction = (float)(Math.PI - direction);
+			System.out.println("Collision with LEFT OF BRICK" );
+		}
+		if (ax <= (O.x + O.l) && ax>= (O.x + O.l/2) && ay >=(O.y - h) && ay <(O.y -h + O.h/2)){ 
+			direction = (float)(Math.PI - direction);
+			System.out.println("Collision with RIGHT OF BRICK" );
+		}
+		*/
+		
+		if (x>= O.x && x<= (O.x + O.l -l) && y <=(O.y + O.h) && y >(O.y + O.h/5)){ 
+			direction = (float)(2 *(Math.PI) - direction);
+			System.out.println("Collision with BOTTOM OF BRICK" );
+			O.lowerState();
+		}
+		if (x>= O.x && x<= (O.x + O.l -l) && y >=(O.y - h) && y <(O.y -h + O.h/5)){ 
+			direction = (float)(2 *(Math.PI) - direction);
+			System.out.println("Collision with TOP OF BRICK" );
+			O.lowerState();
+		}
+		if (x >= O.x && x<= (O.x + O.l/5 - l) && y >=(O.y -h) && y <(O.y -h + O.h)){ 
+			direction = (float)(Math.PI - direction);
+			System.out.println("Collision with LEFT OF BRICK" );
+			O.lowerState();
+		}
+		if (x <= (O.x + O.l) && x>= (O.x + O.l/5) && y >=(O.y - h) && y <(O.y -h + O.h)){ 
+			direction = (float)(Math.PI - direction);
+			System.out.println("Collision with RIGHT OF BRICK" );
+			O.lowerState();
 		}
 	}
         void bounceOffPaddle(int ax, int ay, int length){
@@ -98,6 +118,7 @@ public class  Object {
 		}       
 		
 		void bounceOffWalls(int screenW, int screenH){
+						
 			if (y <= h ){ 
 				direction = (float)(2 *(Math.PI) - direction);
 				//System.out.println("Collision with TOP wall" );
@@ -112,13 +133,26 @@ public class  Object {
 			}
 			//This will have to dissapear
 			if (y >=  screenH - l ){
-				direction = (float)(direction +2 *(Math.PI - direction));
+				direction = (float)(2 *(Math.PI) - direction);
 				//System.out.println("Collision with BOTTOM wall" );
 			}
 		}
-
 		
-
+	/* NextX and nextY were both created in order to deal with the problem
+	 * of the ball going through the object too quickly for the program
+	 * to respond
+	 */
+	 	
+    public int nextX(){
+        int ax = (int)(trueX + vitesse*Math.cos(direction));
+        return ax;
+	}		
+	
+	public int nextY(){
+		int ay = (int)(trueY + vitesse*Math.sin(direction));
+		return ay;
+	}
+		
     
     public void move(Rectangle Ecran) {
         trueX = trueX + vitesse*Math.cos(direction); 
