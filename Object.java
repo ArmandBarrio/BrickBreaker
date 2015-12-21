@@ -44,6 +44,7 @@ public class  Object {
         actif=true;
         
     }
+    // habile Armand le deuxieme constructeur ! 
     public Object( int ax, int ay, float ad, float av)    {      
         x=ax;
         trueX = ax;   

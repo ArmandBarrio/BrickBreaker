@@ -41,7 +41,17 @@ public class  Brick extends Object {
             }
             this.state = -1;
 		}
-			
+		if (Type == "PowerUp"){
+				try {
+             image= ImageIO.read(new File("BrickPowerUp.png"));
+             } 
+         catch(Exception err) 
+             {
+            System.out.println("BrickPowerUp.png"+" introuvable !");            
+            System.exit(0);    
+            }
+            this.state = 1;
+		}
 		if (Type == "Normal" && state > 0){
 			try {
              image= ImageIO.read(new File("Brick"+state+".png"));
@@ -54,6 +64,7 @@ public class  Brick extends Object {
 		}
 		
 		/* Guillaume, I didn't quite get the point of this, it seems to work fine without it
+		 * It works now because of the second constructor without an image for objects  G.
 		 * 
 		 *  (state == 0){ 
 			// this is a random image that is not displayed

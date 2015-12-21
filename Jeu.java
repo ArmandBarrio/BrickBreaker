@@ -35,6 +35,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
     
     //Add the Object array
     public Brick lesBriques[][]= new Brick[12][3];
+    public PowerUp lesPowerUps[] = new PowerUp[0];
 
 	//Game Animation
 	public int NbVies = 3;
@@ -118,16 +119,17 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				String randomType = "Normal";
 				int randomState = (int)(Math.random()*3 +1);
 				if (r < 0.2)  randomType = "Unbreakable";
+				if ( r > 0.2 && r < 0.7) randomType = "PowerUp";
 				if ( r > 0.7) randomType = "Normal";
 				lesBriques[i][j] = new Brick ( 100 + i * 70, 200+j * 34, randomType, randomState );
 			}
 		}
         // Pour créer les murs
-        leftWall = new Object ( "VerticalWall.png" , 10000,10, 0,0);
-        rightWall = new Object ( "VerticalWall.png" , 100000+lesBriques.length * 70,10, 0,0);
-        upperWall = new Object ( "HorizontalWall.png" , 100000,10, 0,0);
+        upperWall = new Object ( "HorizontalWall.png" , 10,10, 0,0);
+        leftWall = new Object ( "VerticalWall.png" , 10,10+upperWall.h, 0,0);
+        rightWall = new Object ( "VerticalWall.png" , 10+lesBriques.length * 70,10+upperWall.h, 0,0);
         
-<<<<<<< HEAD
+        
         // Create the Paddle
         Paddle = new Object ( "Paddle.png", (int)(screenWidth*0.3),(int)(screenHeight*0.9),10,10);
         
@@ -145,11 +147,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
         
         Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (285*Math.PI*2.0/360.0),10);
 
-=======
         // Create the Paddle and Ball
         Paddle = new Object ( "Paddle.png", 400,(int)(screenHeight*0.9),10,10/TempsTimer_ms);        
-        Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0),6/TempsTimer_ms);
->>>>>>> 90aaeffbcc0f3c1e857c503d70b0a87381bfde84
+        Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0),10/TempsTimer_ms);
 
 		
 		//Make Window appear		
@@ -287,6 +287,21 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		} 
 	}
 	
+	public void gestionPowerUp(){
+		for (int i=0; i< lesPowerUps.length; i++){
+			lesPowerUps[i].move(Ecran);
+			if (lesPowerUps[i].Collision(Paddle)){
+				// each power up has its effect 
+				if (lesPowerUps[i].Type == "fasterBall"){
+					Ball.vitesse = (float)( Ball.vitesse*1.5);
+				}
+				if(lesPowerUps[i].Type == "slowerBall" ){
+					Ball.vitesse = (float)(Ball.vitesse*0.7);
+				}
+			}
+		}
+	}
+
 	public void gestionBall(){
 		
 		Ball.move(Ecran);
@@ -401,13 +416,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
         //useful?
     }
 
-		@Override
 	public void mouseMoved(MouseEvent e) {
 		if ( e.getX() > paddleWidth/2 && e.getX() < screenWidth - paddleWidth/2){
 			Paddle.x = e.getX() - paddleWidth/2;
 		}
 	}
-		@Override
 	public void mouseDragged(MouseEvent e) {
       throw new UnsupportedOperationException("Not supported yet.");
 	}
