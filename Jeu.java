@@ -23,8 +23,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-public class Jeu extends JFrame implements ActionListener,KeyListener{
-	
+
+public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotionListener{
+		
 	//Add Timer
 	public int TempsTimer_ms = 1;
 	public Timer Montimer;
@@ -52,6 +53,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	//Wallpaper image and Rectangle
 	public Rectangle Ecran;
 	public Image Wallpaper;
+	public Image GameOver;
 	public Image startScreenWallpaper;
 	public Image paddle;
     public Image brick;
@@ -64,9 +66,14 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	public int paddleWidth = 200;
 	public int paddleHeight = 30;
 	
-	//Start Screen
-	boolean startScreen = false;
-    boolean arrowUp = true;
+	//Start Screen and Game Over
+	public boolean startScreen = true;
+	public boolean arrowUp = true;
+    public boolean gameOver = false;
+    
+    //Pause the ball before sending it
+    public boolean newBall = true;
+    public int countdown;
     
     //Objets
     public Brick brique;
@@ -83,6 +90,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	
 	//font
 	Font font;
+	Font font2;
 	
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
@@ -117,8 +125,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         
         // Create the Paddle and Ball
         Paddle = new Object ( "Paddle.png", 400,(int)(screenHeight*0.9),10,10/TempsTimer_ms);        
-        Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (270*Math.PI*2.0/360.0),10/TempsTimer_ms);
-
+        Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0),6/TempsTimer_ms);
 
 		
 		//Make Window appear		
@@ -135,12 +142,10 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		Wallpaper = T.getImage("wallpaper.jpg");
 		startScreenWallpaper = T.getImage("StartScreen.jpg");
 		paddle = T.getImage("Paddle.png");
+		GameOver = T.getImage("GameOver.jpg");
 		
 		//ActionListener
 		Montimer = new Timer(TempsTimer_ms,this);	
-		Montimer.start();
-
-		//Started by Enter Key Montimer.start();
 		Montimer.start();
 		
         //Buffer and all
@@ -150,8 +155,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		//play music (doesn't work yet)
 		music();
 
-		//KeyListener
+		//KeyListener and MouseMotionListener
 		addKeyListener(this);
+		addMouseMotionListener(this);
 			
 		// Font
 		 try{
@@ -159,8 +165,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 			buffer.setFont(font);
         } catch(Exception ex){
             System.out.println("Fonte COMPUTER.TTF non trouvée !");
-        } 
+        }     
         
+        font2 = font.deriveFont(1,200);
+		buffer.setFont(font2); 
+		buffer.setColor(Color.white);
 		
 		this.setVisible(true);
 		repaint();
@@ -173,14 +182,33 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				this.setTitle("Time : " + String.valueOf(s-gameStartTime) + "   |  Lives "+ String.valueOf(NbVies));
 			}
 			Temps++;
-			if (startScreen){
+			
+			if (startScreen){ 
 				startScreenAction();
-			}else{
-				gestionBall();
-				//gestionBricks done by gestionBall
+			}else if (!gameOver){
 				gestionPaddle();
+				if (!newBall){
+					gestionBall();
+				}else{
+					countdown++;
+				}	
 			}
 			
+			if (countdown > 200 && !gameOver){
+				newBall = false;
+				countdown = 0;
+			}
+			
+			if(gameOver){
+				countdown++;
+				if (countdown > 300){
+					gameOver = false;
+					startScreen = true;
+					startScreenAction();
+					countdown = 0;
+				}
+			}
+				
 			if(Temps%50 == 0){
 				// To determine positions every so seconds
 				//System.out.println(Paddle.x + "   "  +  Ball.x +"  | " + Paddle.y +"   " + Ball.y );
@@ -199,6 +227,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		if (!arrowUp && toucheEnter){
 			System.exit(0);
 		}
+		NbVies = 3;
 	}
 	
 	public void music(){
@@ -227,7 +256,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	
 	public void gestionBall(){
 		
-        Ball.move(Ecran);
+		Ball.move(Ecran);
         
         for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j < lesBriques[0].length;  j++){
@@ -239,6 +268,18 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         
         Ball.bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth);
         Ball.bounceOffWalls(screenWidth, screenHeight);
+        
+        if (Ball.y > screenHeight + 100){
+			NbVies--;
+			Ball.setX((int)(screenWidth*0.2));
+			Ball.setY((int)(screenHeight*0.5));
+			newBall = true;
+			Ball.direction = (float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0);
+			if (NbVies == 0) {
+				gameOver = true;
+			}
+		}
+		
    
 		
 	}
@@ -320,22 +361,27 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         //useful?
     }
 
+		@Override
+	public void mouseMoved(MouseEvent e) {
+		if ( e.getX() > paddleWidth/2 && e.getX() < screenWidth - paddleWidth/2){
+			Paddle.x = e.getX() - paddleWidth/2;
+		}
+	}
+		@Override
+	public void mouseDragged(MouseEvent e) {
+      throw new UnsupportedOperationException("Not supported yet.");
+	}
+	
 	public void paint(Graphics g){
 		
 		if(startScreen == true){
 			buffer.drawImage(startScreenWallpaper,0,0,this);
-			//font.size = 200;
-			//buffer.setFont(font); 
-			buffer.setFont(new Font("Dialog", Font.PLAIN, (int)(screenHeight*0.17)));
+			font2 = font.deriveFont(1,(int)(screenHeight*0.25));
+			buffer.setFont(font2); 
 			buffer.setColor(Color.white);
-			buffer.drawString("New Game?",300,(int)(screenHeight*0.3));
-			
-			buffer.setFont(new Font("Dialog", Font.PLAIN, (int)(screenHeight*0.17)));
-			buffer.setColor(Color.white);
-			buffer.drawString("Yes",(int)(screenWidth*0.4),(int)(screenHeight*0.6));
-		
-			buffer.setFont(new Font("Dialog", Font.PLAIN, (int)(screenHeight*0.17)));
-			buffer.setColor(Color.white);
+ 
+			buffer.drawString("New Game?",(int)(screenWidth * 0.1),(int)(screenHeight*0.3));		
+			buffer.drawString("Yes",(int)(screenWidth*0.4),(int)(screenHeight*0.6));;
 			buffer.drawString("Exit",(int)(screenWidth*0.4),(int)(screenHeight*0.8));
 			
 			if( arrowUp == true){
@@ -344,7 +390,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				buffer.drawString(">",(int)(screenWidth*0.4 - 100),(int)(screenHeight*0.8));
 			}
 			
-		}else{
+		}else if (!gameOver){
 			buffer.drawImage(Wallpaper,0,0,this);
 			// afficher toutes les briques actives
             for ( int i = 0; i< lesBriques.length; i++){
@@ -364,10 +410,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
             buffer.drawImage(Paddle.image, Paddle.x, Paddle.y, paddleWidth, paddleHeight, this);
 ;	
 
+		
+		} else {
+			buffer.drawImage(GameOver,0,0,screenWidth, screenHeight, this);
 		}
 			
-		g.drawImage(ArrierePlan,0,0,this);
-		
-		
+		g.drawImage(ArrierePlan,0,0,this);		
 	}
 }

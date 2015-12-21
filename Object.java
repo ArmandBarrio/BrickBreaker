@@ -84,29 +84,29 @@ public class  Object {
 		}
 		*/
 		
-		if (x>= O.x && x<= (O.x + O.l -l) && y <=(O.y + O.h) && y >(O.y + O.h/5)){ 
+		if (x>= O.x-l/2 && x<= (O.x + O.l -l/2) && y <=(O.y + O.h + (int)(h*0.2)) && y >= (O.y + (int)(O.h*0.8))){ 
 			direction = (float)(2 *(Math.PI) - direction);
 			System.out.println("Collision with BOTTOM OF BRICK" );
 			O.lowerState();
 		}
-		if (x>= O.x && x<= (O.x + O.l -l) && y >=(O.y - h) && y <(O.y -h + O.h/5)){ 
+		if (x>= (O.x-l/2) && x <= (O.x + O.l -l/2) && y >=(O.y - (int)(h*1.2)) && y <(O.y -h + O.h/5)){ 
 			direction = (float)(2 *(Math.PI) - direction);
 			System.out.println("Collision with TOP OF BRICK" );
 			O.lowerState();
 		}
-		if (x >= O.x && x<= (O.x + O.l/5 - l) && y >=(O.y -h) && y <(O.y -h + O.h)){ 
+		if (x >= (O.x - l - (int)(l*0.2)) && x<= (O.x - l + (int)(l*0.2)) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2)){ 
 			direction = (float)(Math.PI - direction);
 			System.out.println("Collision with LEFT OF BRICK" );
 			O.lowerState();
 		}
-		if (x <= (O.x + O.l) && x>= (O.x + O.l/5) && y >=(O.y - h) && y <(O.y -h + O.h)){ 
+		if (x <= (O.x + O.l + (int)(l*0.2)) && x>= (O.x + O.l - (int)(l*0.2)) && y >=(O.y - h) && y <(O.y -h + O.h)){ 
 			direction = (float)(Math.PI - direction);
 			System.out.println("Collision with RIGHT OF BRICK" );
 			O.lowerState();
 		}
 	}
         void bounceOffPaddle(int ax, int ay, int length){
-			if(y >= ay-h && x >= ax && x<=ax + length){
+			if(y >= ay-h && y <= ay && x >= ax && x<=ax + length){
 				//For no interaction between the paddle and the ball
 				//direction = (float)(2 *(Math.PI) - direction);	
 				
@@ -131,26 +131,23 @@ public class  Object {
 				direction = (float)(Math.PI - direction);
 				//System.out.println("Collision with RIGHT wall" );
 			}
-			//This will have to dissapear
+			/*
+			 * This will have to dissapear
 			if (y >=  screenH - l ){
 				direction = (float)(2 *(Math.PI) - direction);
 				//System.out.println("Collision with BOTTOM wall" );
 			}
+			*/
 		}
-		
-	/* NextX and nextY were both created in order to deal with the problem
-	 * of the ball going through the object too quickly for the program
-	 * to respond
-	 */
 	 	
-    public int nextX(){
-        int ax = (int)(trueX + vitesse*Math.cos(direction));
-        return ax;
+    public void setX(int ax){
+        trueX = (double)(ax);
+		x = ax;
 	}		
 	
-	public int nextY(){
-		int ay = (int)(trueY + vitesse*Math.sin(direction));
-		return ay;
+	public void setY( int ay){
+		trueY = (double)(ay);
+		y = ay;
 	}
 		
     
