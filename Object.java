@@ -58,35 +58,98 @@ public class  Object {
         return BoxObject.intersects(O.BoxObject); 
     }
     
-    void bounce (Object O){			
-		// this only works if the dimension of the objects are greater than speed...
-		if (this.Collision(O)){
-			if (this.x > O.x && this.x < ( O.x = O.l) && this.y > O.y && this.y < ( O.y = O.h)){
-				if (this.direction< Math.PI*2 ){
-					this.direction  = (float)(2*Math.PI-this.direction);
-					
-				}
-				if ( this.direction>3*Math.PI/2){
-					this.direction = (float)(3*Math.PI- this.direction);
-				}
-			}
-				// then for the most difficult configuration, define the last position of the "ball" and define the collision point
-				//to clearly know on which side the ball bounces
-				
-			if( this.x < O.x && this.y > O.y){		//the "ball" arrives on the left side
-				this.direction  = (float)(2*Math.PI-this.direction);
-			}
-			if ( this.x >O.x && this.y < O.y){		// the "ball" arrives on the upper side
-				this.direction  =(float)( Math.PI-this.direction);
-			}
+    boolean bounce (Brick O){				
+		
+		/*Armand : To try to fix this problem, I created the nextX and nextY functions
+		 * Did not work that well
+		
+		int ax = this.nextX();
+		int ay = this.nextY();
+		
+		if (ax>= O.x && ax<= (O.x + O.l -l) && ay <=(O.y + O.h) && ay >(O.y + O.h/2)){ 
+			direction = (float)(2 *(Math.PI) - direction);
+			System.out.println("Collision with BOTTOM OF BRICK" );
 		}
-		if (this.Collision(O)){
-			direction = (float)(direction +2 *(Math.PI - direction));
+		if (ax>= O.x && ax<= (O.x + O.l -l) && ay >=(O.y - h) && ay <(O.y -h + O.h/2)){ 
+			direction = (float)(2 *(Math.PI) - direction);
+			System.out.println("Collision with TOP OF BRICK" );
 		}
+		if (ax>= O.x && ax<= (O.x + O.l/2) && ay >=(O.y -h) && ay <(O.y -h + O.h)){ 
+			direction = (float)(Math.PI - direction);
+			System.out.println("Collision with LEFT OF BRICK" );
+		}
+		if (ax <= (O.x + O.l) && ax>= (O.x + O.l/2) && ay >=(O.y - h) && ay <(O.y -h + O.h/2)){ 
+			direction = (float)(Math.PI - direction);
+			System.out.println("Collision with RIGHT OF BRICK" );
+		}
+		*/
+		
+		if (x>= O.x-l/2 && x<= (O.x + O.l -l/2) && y <=(O.y + O.h + (int)(h*0.2)) && y >= (O.y + (int)(O.h*0.8))){ 
+			direction = (float)(2 *(Math.PI) - direction);
+			System.out.println("Collision with BOTTOM OF BRICK" );
+			O.lowerState();
+			return true;
+		}
+		if (x>= (O.x-l/2) && x <= (O.x + O.l -l/2) && y >=(O.y - (int)(h*1.2)) && y <(O.y -h + O.h/5)){ 
+			direction = (float)(2 *(Math.PI) - direction);
+			System.out.println("Collision with TOP OF BRICK" );
+			O.lowerState();
+			return true;
+		}
+		if (x >= (O.x - l - (int)(l*0.2)) && x<= (O.x - l + (int)(l*0.2)) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2)){ 
+			direction = (float)(Math.PI - direction);
+			System.out.println("Collision with LEFT OF BRICK" );
+			O.lowerState();
+			return true;
+		}
+		if (x <= (O.x + O.l + (int)(l*0.2)) && x>= (O.x + O.l - (int)(l*0.2)) && y >=(O.y - h) && y <(O.y -h + O.h)){ 
+			direction = (float)(Math.PI - direction);
+			System.out.println("Collision with RIGHT OF BRICK" );
+			O.lowerState();
+			return true;
+		}
+		return false;
 	}
-        void bounceOffPaddle(Object O){
-			
+        boolean bounceOffPaddle(int ax, int ay, int length){
+			if(y >= ay-h && y <= ay && x >= ax && x<=ax + length){
+				//For no interaction between the paddle and the ball
+				//direction = (float)(2 *(Math.PI) - direction);	
+				
+				//more complexe ball orientation through paddle collision								
+				direction= (float) (270*Math.PI*2.0/360.0 - ((ax +length/2.0)-x)/(length/2.0) * 50.0*Math.PI*2.0/360.0);
+				//System.out.println("Collision with PADDLE ");
+				return true;
+			}
+			return false;
+		}       
+		
+		boolean bounceOffWalls(int screenW, int screenH){
+						
+			if (y <= h ){ 
+				direction = (float)(2 *(Math.PI) - direction);
+				return true;
+			}
+			if (x< 0){ 
+				direction = (float)(Math.PI - direction);
+				return true;
+			}
+			if (x > screenW - l ){
+				direction = (float)(Math.PI - direction);
+				return true;
+			}
+			return false;
 		}
+	 	
+    public void setX(int ax){
+        trueX = (double)(ax);
+		x = ax;
+	}		
+	
+	public void setY( int ay){
+		trueY = (double)(ay);
+		y = ay;
+	}
+		
     
     public void move(Rectangle Ecran) {
         trueX = trueX + vitesse*Math.cos(direction); 

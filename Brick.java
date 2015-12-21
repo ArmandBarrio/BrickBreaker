@@ -9,10 +9,27 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 public class  Brick extends Object {
+    
     public int state;
+    
+    void lowerState(){
+		
+		state--;
+		
+		if (state > 0){
+			try {
+				image= ImageIO.read(new File("Brick"+state+".png"));
+			}catch(Exception err){
+				System.out.println("Brick"+state+".png"+" introuvable !");    
+			}
+		}
+	}
+    
     public Brick(int ax, int ay, String Type, int s){
+		
         super( ax, ay, 0,0);
         this.state = s;
+        
         if (Type == "Unbreakable"){
 			try {
              image= ImageIO.read(new File("Unbreakable.png"));
@@ -35,7 +52,10 @@ public class  Brick extends Object {
             System.exit(0);    
             }
 		}
-		if (state == 0){ 
+		
+		/* Guillaume, I didn't quite get the point of this, it seems to work fine without it
+		 * 
+		 *  (state == 0){ 
 			// this is a random image that is not displayed
 			try {
              image= ImageIO.read(new File("Paddle.png"));
@@ -45,13 +65,11 @@ public class  Brick extends Object {
             System.out.println("Paddle.jpg"+" introuvable !");            
             System.exit(0);    
             }
-		}
+		} */
 			
 		h= image.getHeight(null);   
         l= image.getWidth(null); 
-        BoxObject = new Rectangle(x,y,l,h);	
-			
-        
+        BoxObject = new Rectangle(x,y,l,h);			
     }
 }
 

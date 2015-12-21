@@ -23,10 +23,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-public class Jeu extends JFrame implements ActionListener,KeyListener{
-	
+
+public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotionListener{
+		
 	//Add Timer
-	public int TempsTimer_ms = 10;
+	public int TempsTimer_ms = 1;
 	public Timer Montimer;
 	public long Temps;
 	public long s;
@@ -51,7 +52,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	
 	//Wallpaper image and Rectangle
 	public Rectangle Ecran;
+	public Image IntroImage;
 	public Image Wallpaper;
+	public Image GameOverImage;
 	public Image startScreenWallpaper;
 	public Image paddle;
     public Image brick;
@@ -61,12 +64,20 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 	public int screenHeight;
 	
 	//paddle size
-	public int paddleWidth = 100;
+	public int paddleWidth = 200;
 	public int paddleHeight = 30;
 	
-	//Start Screen
-	boolean startScreen = false;
-    boolean arrowUp = true;
+	//Start Screen and Game Over
+	public boolean intro = true;
+	public boolean startScreen = false;
+	public boolean play = false;
+    public boolean gameOver = false;	
+	public boolean arrowUp = true;
+ 
+    
+    //Pause the ball before sending it
+    public boolean newBall = true;
+    public int countdown = -600;
     
     //Objets
     public Brick brique;
@@ -81,8 +92,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
     
     public Object Ball;
 	
-	//font
+	//Font management
 	Font font;
+	Font font2;
 	
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
@@ -98,7 +110,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		int screenWidth = (int)(screenSize.getWidth());
 		int screenHeight = (int)(screenSize.getHeight());
 		
-		
         
         // Pour tester les briques, initialisation
         for (int i = 0; i < lesBriques.length; i++){
@@ -106,7 +117,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 				double r = Math.random();
 				String randomType = "Normal";
 				int randomState = (int)(Math.random()*3 +1);
-				if (r <0.2)  randomType = "Unbreakable";
+				if (r < 0.2)  randomType = "Unbreakable";
 				if ( r > 0.7) randomType = "Normal";
 				lesBriques[i][j] = new Brick ( 100 + i * 70, 200+j * 34, randomType, randomState );
 			}
@@ -116,6 +127,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         rightWall = new Object ( "VerticalWall.png" , 100000+lesBriques.length * 70,10, 0,0);
         upperWall = new Object ( "HorizontalWall.png" , 100000,10, 0,0);
         
+<<<<<<< HEAD
         // Create the Paddle
         Paddle = new Object ( "Paddle.png", (int)(screenWidth*0.3),(int)(screenHeight*0.9),10,10);
         
@@ -133,6 +145,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         
         Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (285*Math.PI*2.0/360.0),10);
 
+=======
+        // Create the Paddle and Ball
+        Paddle = new Object ( "Paddle.png", 400,(int)(screenHeight*0.9),10,10/TempsTimer_ms);        
+        Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0),6/TempsTimer_ms);
+>>>>>>> 90aaeffbcc0f3c1e857c503d70b0a87381bfde84
 
 		
 		//Make Window appear		
@@ -149,27 +166,23 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		Wallpaper = T.getImage("wallpaper.jpg");
 		startScreenWallpaper = T.getImage("StartScreen.jpg");
 		paddle = T.getImage("Paddle.png");
+		GameOverImage = T.getImage("GameOver.jpg");
+		IntroImage = T.getImage("IntroImage.gif");
 		
 		//ActionListener
 		Montimer = new Timer(TempsTimer_ms,this);	
-		Montimer.start();
-
-		//Started by Enter Key Montimer.start();
 		Montimer.start();
 		
         //Buffer and all
 		ArrierePlan = new BufferedImage(Ecran.width,Ecran.height,BufferedImage.TYPE_INT_RGB);
 		buffer = ArrierePlan.getGraphics();
-		
-		//play music (doesn't work yet)
-		music();
-		
 
-        
-        
-		//KeyListener
+		//KeyListener and MouseMotionListener
 		addKeyListener(this);
-			
+		addMouseMotionListener(this);
+		
+		//Start Intro Music
+		music("IntroMusic.wav");
 			
 		// Font
 		 try{
@@ -177,8 +190,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 			buffer.setFont(font);
         } catch(Exception ex){
             System.out.println("Fonte COMPUTER.TTF non trouvée !");
-        } 
+        }     
         
+        font2 = font.deriveFont(1,200);
+		buffer.setFont(font2); 
+		buffer.setColor(Color.white);
 		
 		this.setVisible(true);
 		repaint();
@@ -186,43 +202,73 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		
 	public void actionPerformed(ActionEvent e){
 			
-			s = Temps/(long)(100);
-			if (!startScreen){
-				this.setTitle("Time : " + String.valueOf(s-gameStartTime) + "   |  Lives "+ String.valueOf(NbVies));
-			}
-			Temps++;
+		s = Temps/(long)(100);
+		Temps++;
 			
+		if(intro){
+			this.setTitle("BRICKBREAKER || INSA EDITION");
+			countdown++;
+			if (countdown > 300){
+				intro = false;
+				startScreen = true;
+				countdown = 0;
+			}
+		}
+			
+		if (startScreen){ 
 			startScreenAction();
-            
-            gestionBall();
-            gestionPaddle();
-            gestionBricks();
+			this.setTitle("BRICKBREAKER || INSA EDITION");
+		}
 			
-			if(Temps%50 == 0){
-				//System.out.println(Paddle.x + "   " + Paddle.y + "  | " + Ball.x + "   " + Ball.y +  "     " +  richtung + "  |  " + Ball.direction);
+		if (play){
+			this.setTitle("Time : " + String.valueOf(s-gameStartTime) + "   |  Lives "+ String.valueOf(NbVies));
+			gestionPaddle();
+			if (!newBall){
+				gestionBall();
+			}else{
+				countdown++;
+			}	
+			if (countdown > 200){
+				newBall = false;
+				countdown = 0;
 			}
-			
-			
-			repaint();
-			
+		}
+		
+		if(gameOver){
+			this.setTitle("BRICKBREAKER || INSA EDITION");
+			countdown++;
+			if (countdown > 300){
+				gameOver = false;
+				startScreen = true;
+				startScreenAction();
+				countdown = 0;
+			}
+		}
+	
+		repaint();
+		
 	}
 	
 	public void startScreenAction(){
-		if (startScreen && arrowUp && toucheEnter){
+				
+		if (arrowUp && toucheEnter){
 			startScreen = false;
+			play = true;
+			music("PlayMusic.wav");
+			NbVies = 3;
 			gameStartTime = s;
-		}
-		if (startScreen && !arrowUp && toucheEnter){
+			countdown = -360;
+		}else if (!arrowUp && toucheEnter){
 			System.exit(0);
 		}
 	}
 	
-	public void music(){
+	public void music(String s){
 		
 		try{
 			AudioInputStream audioInputStream =
 			AudioSystem.getAudioInputStream(
-            this.getClass().getResource("Music.mp3"));
+            this.getClass().getResource(s));
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
 			clip.start();
@@ -233,43 +279,48 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 		
 	public void gestionPaddle(){
 		
-		if (toucheDroite==true){
+		if (toucheDroite==true && Paddle.x < screenWidth-paddleWidth){
 			Paddle.x=Paddle.x+(int)(Paddle.vitesse); 
 		}
-		if (toucheGauche==true){
+		if (toucheGauche==true && Paddle.x > 0){
 			Paddle.x=Paddle.x-(int)(Paddle.vitesse);
 		} 
 	}
-				
-	public void gestionBricks(){
-        // tests if there are collisions. 
-        for (int i = 0; i < lesBriques.length; i++){
-			for (int j = 0 ; j < lesBriques[0].length;  j++){
-				if (lesBriques[i][j].Collision(Ball) && lesBriques[i][j].state !=0){
-					lesBriques[i][j].state= lesBriques[i][j].state-1;
-				}
-            //System.out.println( lesBriques[i][j].state);
-			}
-        }
-			
-			
-	}
 	
 	public void gestionBall(){
-        Ball.move(Ecran);
+		
+		Ball.move(Ecran);
+        
         for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j < lesBriques[0].length;  j++){
                 if( lesBriques[i][j].state != 0){
-                    Ball.bounce(lesBriques[i][j]);
+                    if (Ball.bounce(lesBriques[i][j])){
+						music("CollisionMusic.wav");
+					}
                 }
             }
         }
-        Ball.bounce(upperWall);
-        Ball.bounce(leftWall);
-        Ball.bounce(rightWall);
-        Ball.bounce(Paddle);
-                
         
+        if (Ball.bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth)){
+			music("PaddleBounceMusic.wav");
+		}
+        
+        if (Ball.bounceOffWalls(screenWidth, screenHeight)){
+			music("WallBouncenMusic.wav");
+		}
+        
+        if (Ball.y > screenHeight + 100){
+			NbVies--;
+			Ball.setX((int)(screenWidth*0.2));
+			Ball.setY((int)(screenHeight*0.5));
+			newBall = true;
+			Ball.direction = (float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0);
+			if (NbVies == 0) {
+				play = false;
+				gameOver = true;
+				music("GameOverMusic.wav");
+			}
+		}
 		
 	}
 		
@@ -280,29 +331,29 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 
         if(e.getKeyCode()==KeyEvent.VK_LEFT){
             toucheGauche=true;
-            System.out.println("Left pressed");
+            //System.out.println("Left pressed");
         }
         if(e.getKeyCode()==KeyEvent.VK_RIGHT){
             toucheDroite=true;
-            System.out.println("Right pressed");
+            //System.out.println("Right pressed");
         }
         if(e.getKeyCode()==KeyEvent.VK_UP){
             toucheHaut=true;
-            System.out.println("Up pressed");
+            //System.out.println("Up pressed");
             arrowUp = !arrowUp;
         }
         if(e.getKeyCode()==KeyEvent.VK_DOWN){
             toucheBas=true;
-            System.out.println("Down pressed");
+            //System.out.println("Down pressed");
             arrowUp = !arrowUp;
 		}
         if(e.getKeyCode()==KeyEvent.VK_SPACE){
             toucheEspace=true;
-            System.out.println("Space pressed");
+            //System.out.println("Space pressed");
         }
         if(e.getKeyCode()==KeyEvent.VK_ENTER){
             toucheEnter = true;            
-            System.out.println("Enter pressed");
+            //System.out.println("Enter pressed");
         }
         if(e.getKeyCode()==KeyEvent.VK_ESCAPE){
             toucheEchap=true;
@@ -350,22 +401,31 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         //useful?
     }
 
+		@Override
+	public void mouseMoved(MouseEvent e) {
+		if ( e.getX() > paddleWidth/2 && e.getX() < screenWidth - paddleWidth/2){
+			Paddle.x = e.getX() - paddleWidth/2;
+		}
+	}
+		@Override
+	public void mouseDragged(MouseEvent e) {
+      throw new UnsupportedOperationException("Not supported yet.");
+	}
+	
 	public void paint(Graphics g){
 		
-		if(startScreen == true){
-			buffer.drawImage(startScreenWallpaper,0,0,this);
-			//font.size = 200;
-			//buffer.setFont(font); 
-			buffer.setFont(new Font("Dialog", Font.PLAIN, (int)(screenHeight*0.17)));
-			buffer.setColor(Color.white);
-			buffer.drawString("New Game?",300,(int)(screenHeight*0.3));
-			
-			buffer.setFont(new Font("Dialog", Font.PLAIN, (int)(screenHeight*0.17)));
-			buffer.setColor(Color.white);
-			buffer.drawString("Yes",(int)(screenWidth*0.4),(int)(screenHeight*0.6));
+		if (intro){
+			buffer.drawImage(IntroImage,0,0,screenWidth,screenHeight,this);
+		}
 		
-			buffer.setFont(new Font("Dialog", Font.PLAIN, (int)(screenHeight*0.17)));
+		if(startScreen){
+			buffer.drawImage(startScreenWallpaper,0,0,this);
+			font2 = font.deriveFont(1,(int)(screenHeight*0.25));
+			buffer.setFont(font2); 
 			buffer.setColor(Color.white);
+ 
+			buffer.drawString("New Game?",(int)(screenWidth * 0.1),(int)(screenHeight*0.3));		
+			buffer.drawString("Yes",(int)(screenWidth*0.4),(int)(screenHeight*0.6));;
 			buffer.drawString("Exit",(int)(screenWidth*0.4),(int)(screenHeight*0.8));
 			
 			if( arrowUp == true){
@@ -373,9 +433,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 			}else{
 				buffer.drawString(">",(int)(screenWidth*0.4 - 100),(int)(screenHeight*0.8));
 			}
+		}
 			
-		}else{
-            
+		if (play){
 			buffer.drawImage(Wallpaper,0,0,this);
 			// afficher toutes les briques actives
             for ( int i = 0; i< lesBriques.length; i++){
@@ -384,22 +444,21 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
 					if (lesBriques[i][j].state != 0){					
 						buffer.drawImage(lesBriques[i][j].image, lesBriques[i][j].x,lesBriques[i][j].y,this);
 					}
-                    
 				}
 			}
+			
             buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
 
             buffer.drawImage(leftWall.image, leftWall.x,leftWall.y,this);
             buffer.drawImage(rightWall.image, rightWall.x,rightWall.y,this);
             buffer.drawImage(upperWall.image, upperWall.x,upperWall.y,this);
-            buffer.drawImage(Paddle.image, Paddle.x,Paddle.y,this);
-
-           buffer.drawImage(paddle,Paddle.x,(int)(screenHeight*0.9),paddleWidth,paddleHeight,this);	
-
+            buffer.drawImage(Paddle.image, Paddle.x, Paddle.y, paddleWidth, paddleHeight, this);
+		} 
+		
+		if (gameOver){
+			buffer.drawImage(GameOverImage,0,0,screenWidth, screenHeight, this);
 		}
 			
-		g.drawImage(ArrierePlan,0,0,this);
-		
-		
+		g.drawImage(ArrierePlan,0,0,this);		
 	}
 }
