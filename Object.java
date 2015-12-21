@@ -58,7 +58,7 @@ public class  Object {
         return BoxObject.intersects(O.BoxObject); 
     }
     
-    void bounce (Brick O){				
+    boolean bounce (Brick O){				
 		
 		/*Armand : To try to fix this problem, I created the nextX and nextY functions
 		 * Did not work that well
@@ -88,24 +88,29 @@ public class  Object {
 			direction = (float)(2 *(Math.PI) - direction);
 			System.out.println("Collision with BOTTOM OF BRICK" );
 			O.lowerState();
+			return true;
 		}
 		if (x>= (O.x-l/2) && x <= (O.x + O.l -l/2) && y >=(O.y - (int)(h*1.2)) && y <(O.y -h + O.h/5)){ 
 			direction = (float)(2 *(Math.PI) - direction);
 			System.out.println("Collision with TOP OF BRICK" );
 			O.lowerState();
+			return true;
 		}
 		if (x >= (O.x - l - (int)(l*0.2)) && x<= (O.x - l + (int)(l*0.2)) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2)){ 
 			direction = (float)(Math.PI - direction);
 			System.out.println("Collision with LEFT OF BRICK" );
 			O.lowerState();
+			return true;
 		}
 		if (x <= (O.x + O.l + (int)(l*0.2)) && x>= (O.x + O.l - (int)(l*0.2)) && y >=(O.y - h) && y <(O.y -h + O.h)){ 
 			direction = (float)(Math.PI - direction);
 			System.out.println("Collision with RIGHT OF BRICK" );
 			O.lowerState();
+			return true;
 		}
+		return false;
 	}
-        void bounceOffPaddle(int ax, int ay, int length){
+        boolean bounceOffPaddle(int ax, int ay, int length){
 			if(y >= ay-h && y <= ay && x >= ax && x<=ax + length){
 				//For no interaction between the paddle and the ball
 				//direction = (float)(2 *(Math.PI) - direction);	
@@ -113,31 +118,26 @@ public class  Object {
 				//more complexe ball orientation through paddle collision								
 				direction= (float) (270*Math.PI*2.0/360.0 - ((ax +length/2.0)-x)/(length/2.0) * 50.0*Math.PI*2.0/360.0);
 				//System.out.println("Collision with PADDLE ");
+				return true;
 			}
-
+			return false;
 		}       
 		
-		void bounceOffWalls(int screenW, int screenH){
+		boolean bounceOffWalls(int screenW, int screenH){
 						
 			if (y <= h ){ 
 				direction = (float)(2 *(Math.PI) - direction);
-				//System.out.println("Collision with TOP wall" );
+				return true;
 			}
 			if (x< 0){ 
 				direction = (float)(Math.PI - direction);
-				//System.out.println("Collision with LEFT wall" );
+				return true;
 			}
-			if (x > screenW - l ){ 
+			if (x > screenW - l ){
 				direction = (float)(Math.PI - direction);
-				//System.out.println("Collision with RIGHT wall" );
+				return true;
 			}
-			/*
-			 * This will have to dissapear
-			if (y >=  screenH - l ){
-				direction = (float)(2 *(Math.PI) - direction);
-				//System.out.println("Collision with BOTTOM wall" );
-			}
-			*/
+			return false;
 		}
 	 	
     public void setX(int ax){
