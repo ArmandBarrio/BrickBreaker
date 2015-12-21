@@ -117,7 +117,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         upperWall = new Object ( "HorizontalWall.png" , 100000,10, 0,0);
         
         // Create the Paddle
-        Paddle = new Object ( "Paddle.png", 400,800,10,10);
+        Paddle = new Object ( "Paddle.png", (int)(screenWidth*0.3),(int)(screenHeight*0.9),10,10);
         
         
 				
@@ -131,7 +131,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener{
         lesBriques[3]=brique3;
         */
         
-        Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (300*Math.PI*2.0/360.0),2);
+        Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (285*Math.PI*2.0/360.0),10);
 
 
 		
