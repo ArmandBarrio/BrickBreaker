@@ -298,24 +298,27 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	
 	public void gestionPowerUp(){
 		for (int i=0; i< lesPowerUps.length; i++){
-			lesPowerUps[i].setX(lesPowerUps[i].x);
-			lesPowerUps[i].setY(lesPowerUps[i].y);
-			lesPowerUps[i].move(Ecran);
-			if (lesPowerUps[i].Collision(Paddle)){
-				System.out.println("le PU"+lesPowerUps[i].Type+ "touche le paddle");
-				// each power up has its effect 
-				if (lesPowerUps[i].Type == "fasterBall"){
-					Ball.vitesse = (float)( Ball.vitesse+5);
-					System.out.println ( " la vitesse de la balle est : " +Ball.vitesse);
-				}
-				if(lesPowerUps[i].Type == "slowerBall" ){
-					Ball.vitesse = (float)(Ball.vitesse-5);
-					System.out.println ( " la vitesse de la balle est : " +Ball.vitesse);
+			if (lesPowerUps[i].active){
+				lesPowerUps[i].setX(lesPowerUps[i].x);
+				lesPowerUps[i].setY(lesPowerUps[i].y);
+				lesPowerUps[i].move(Ecran);
+				if (lesPowerUps[i].bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth)){
+					System.out.println("le PU"+lesPowerUps[i].Type+ "touche le paddle");
+					lesPowerUps[i].active = false;
+					// each power up has its effect 
+					if (lesPowerUps[i].Type == "fasterBall"){
+						Ball.vitesse = (float)( Ball.vitesse+5);
+						System.out.println ( " la vitesse de la balle est : " +Ball.vitesse);
+					}
+					if(lesPowerUps[i].Type == "slowerBall" ){
+						Ball.vitesse = (float)(Ball.vitesse-5);
+						System.out.println ( " la vitesse de la balle est : " +Ball.vitesse);
+					}
 				}
 			}
 		}
 	}
-
+	
 	public void gestionBall(){
 		
 		Ball.move(Ecran);
@@ -496,7 +499,10 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 			}
 			for (int i = 0 ; i<lesPowerUps.length ; i++){
-				buffer.drawImage(lesPowerUps[i].image, lesPowerUps[i].x,lesPowerUps[i].y,this);
+				if (lesPowerUps[i].active){
+					
+					buffer.drawImage(lesPowerUps[i].image, lesPowerUps[i].x,lesPowerUps[i].y,this);
+				}
 			}
             buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
 
