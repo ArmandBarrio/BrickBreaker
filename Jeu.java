@@ -78,7 +78,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
     
     //Pause the ball before sending it
     public boolean newBall = true;
-    public int countdown = -600;
+    public int countdown = -400;
     
     //Objets
     public Brick brique;
@@ -119,8 +119,8 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				String randomType = "Normal";
 				int randomState = (int)(Math.random()*3 +1);
 				if (r < 0.2)  randomType = "Unbreakable";
-				if ( r > 0.2 && r < 0.7) randomType = "PowerUp";
-				if ( r > 0.7) randomType = "Normal";
+				if ( r > 0.2 && r < 0.8) randomType = "PowerUp";
+				if ( r > 0.8) randomType = "Normal";
 				lesBriques[i][j] = new Brick ( 100 + i * 70, 200+j * 34, randomType, randomState );
 			}
 		}
@@ -223,6 +223,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		if (play){
 			this.setTitle("Time : " + String.valueOf(s-gameStartTime) + "   |  Lives "+ String.valueOf(NbVies));
 			gestionPaddle();
+			//gestionPowerUp();
 			if (!newBall){
 				gestionBall();
 			}else{
@@ -311,6 +312,18 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
                 if( lesBriques[i][j].state != 0){
                     if (Ball.bounce(lesBriques[i][j])){
 						music("CollisionMusic.wav");
+						if(lesBriques[i][j].Type == "PowerUp"){
+							PowerUp newPowerUp = new PowerUp( "fasterBall", lesBriques[i][j].x,lesBriques[i][j].y);
+							PowerUp lesNewPowerUps[] = new PowerUp[lesPowerUps.length+1];
+							for ( int k =0; k<lesPowerUps.length; k++){
+								lesNewPowerUps[k] = lesPowerUps[k];
+							}
+							lesNewPowerUps[lesPowerUps.length] = newPowerUp;
+							lesPowerUps=lesNewPowerUps;
+						}
+							
+								
+												
 					}
                 }
             }
@@ -459,7 +472,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					}
 				}
 			}
-			
+			for (int i = 0 ; i<lesPowerUps.length ; i++){
+				buffer.drawImage(lesPowerUps[i].image, lesPowerUps[i].x,lesPowerUps[i].y,this);
+			}
             buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
 
             buffer.drawImage(leftWall.image, leftWall.x,leftWall.y,this);

@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 public class  Brick extends Object {
     
     public int state;
+    public String Type;
     
     void lowerState(){
 		
@@ -25,10 +26,12 @@ public class  Brick extends Object {
 		}
 	}
     
-    public Brick(int ax, int ay, String Type, int s){
+    public Brick(int ax, int ay, String T, int s){
 		
         super( ax, ay, 0,0);
         this.state = s;
+        Type=T;
+        
         
         if (Type == "Unbreakable"){
 			try {
