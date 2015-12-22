@@ -160,6 +160,7 @@ public class  Object {
         
         BoxObject.setLocation(x,y);
         
+        
         if (( x + l<0)||( y + h<0)||( x > Ecran.width) ||( y > Ecran.height)) actif=false;
     }
     

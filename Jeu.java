@@ -35,7 +35,10 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
     
     //Add the Object array
     public Brick lesBriques[][]= new Brick[12][3];
-    public PowerUp lesPowerUps[] = new PowerUp[0];
+    public PowerUp lesPowerUps[] = new PowerUp[1];
+    PowerUp firstPowerUp;
+    
+
 
 	//Game Animation
 	public int NbVies = 3;
@@ -78,7 +81,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
     
     //Pause the ball before sending it
     public boolean newBall = true;
-    public int countdown = -400;
+    public int countdown = -200;
     
     //Objets
     public Brick brique;
@@ -132,6 +135,10 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
         
         // Create the Paddle
         Paddle = new Object ( "Paddle.png", (int)(screenWidth*0.3),(int)(screenHeight*0.9),10,10);
+        
+        // test powerups
+        firstPowerUp = new PowerUp("fasterBall", 100, 400);
+		lesPowerUps[0] = firstPowerUp;
         
         
 				
@@ -208,7 +215,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		if(intro){
 			this.setTitle("BRICKBREAKER || INSA EDITION");
 			countdown++;
-			if (countdown > 300){
+			if (countdown > 100){
 				intro = false;
 				startScreen = true;
 				countdown = 0;
@@ -223,22 +230,23 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		if (play){
 			this.setTitle("Time : " + String.valueOf(s-gameStartTime) + "   |  Lives "+ String.valueOf(NbVies));
 			gestionPaddle();
-			//gestionPowerUp();
+			gestionPowerUp();
 			if (!newBall){
 				gestionBall();
 			}else{
 				countdown++;
 			}	
-			if (countdown > 200){
+			if (countdown > 100){
 				newBall = false;
 				countdown = 0;
 			}
+			
 		}
 		
 		if(gameOver){
 			this.setTitle("BRICKBREAKER || INSA EDITION");
 			countdown++;
-			if (countdown > 300){
+			if (countdown > 100){
 				gameOver = false;
 				startScreen = true;
 				startScreenAction();
@@ -258,7 +266,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			music("PlayMusic.wav");
 			NbVies = 3;
 			gameStartTime = s;
-			countdown = -360;
+			countdown = -160;
 		}else if (!arrowUp && toucheEnter){
 			System.exit(0);
 		}
@@ -290,14 +298,19 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	
 	public void gestionPowerUp(){
 		for (int i=0; i< lesPowerUps.length; i++){
+			lesPowerUps[i].setX(lesPowerUps[i].x);
+			lesPowerUps[i].setY(lesPowerUps[i].y);
 			lesPowerUps[i].move(Ecran);
 			if (lesPowerUps[i].Collision(Paddle)){
+				System.out.println("le PU"+lesPowerUps[i].Type+ "touche le paddle");
 				// each power up has its effect 
 				if (lesPowerUps[i].Type == "fasterBall"){
-					Ball.vitesse = (float)( Ball.vitesse*1.5);
+					Ball.vitesse = (float)( Ball.vitesse+5);
+					System.out.println ( " la vitesse de la balle est : " +Ball.vitesse);
 				}
 				if(lesPowerUps[i].Type == "slowerBall" ){
-					Ball.vitesse = (float)(Ball.vitesse*0.7);
+					Ball.vitesse = (float)(Ball.vitesse-5);
+					System.out.println ( " la vitesse de la balle est : " +Ball.vitesse);
 				}
 			}
 		}
@@ -314,12 +327,22 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 						music("CollisionMusic.wav");
 						if(lesBriques[i][j].Type == "PowerUp"){
 							PowerUp newPowerUp = new PowerUp( "fasterBall", lesBriques[i][j].x,lesBriques[i][j].y);
+							System.out.println ( "nouveau fasterBall créé. vitesse :"+ newPowerUp.vitesse +"direction : "+newPowerUp.direction);
 							PowerUp lesNewPowerUps[] = new PowerUp[lesPowerUps.length+1];
 							for ( int k =0; k<lesPowerUps.length; k++){
-								lesNewPowerUps[k] = lesPowerUps[k];
+								lesNewPowerUps[k]= lesPowerUps[k];
+								
 							}
 							lesNewPowerUps[lesPowerUps.length] = newPowerUp;
 							lesPowerUps=lesNewPowerUps;
+							for (int k =0; k<lesPowerUps.length;k++){
+								System.out.print (lesPowerUps[k].Type + "position :" +lesNewPowerUps[k].x+";"+lesNewPowerUps[k].y);
+								if (lesNewPowerUps[k].active){
+									System.out.println( "  is active");
+								}else{
+									System.out.println("   is not active");
+								}
+							}
 						}
 							
 								
