@@ -34,9 +34,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	public long gameStartTime;
 
   //Add the Object array
-  public Brick lesBriques[][]= new Brick[12][3];
-  //public PowerUp lesPowerUps[] = new PowerUp[1];
-	//PowerUp firstPowerUp;
+  public Brick lesBriques[][]= new Brick[20][5];
+  public PowerUp lesPowerUps[] = new PowerUp[0];
+  //PowerUp firstPowerUp;
 
 
 
@@ -125,18 +125,17 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				String randomType = "Normal";
 				int randomState = (int)(Math.random()*3 +1);
 				if (r < 0.2)  randomType = "Unbreakable";
-				//if ( r > 0.2 && r < 0.8) randomType = "PowerUp";
-				if ( r >=0.2) {
+				if ( r > 0.2 && r < 0.4) randomType = "PowerUp";
+				if ( r >=0.4) {
 					randomType = "Normal";
-					nbNormalBricks+=1;
 				}
-				lesBriques[i][j] = new Brick ( 100 + i * 70, 200+j * 34, randomType, randomState );
+				lesBriques[i][j] = new Brick ( 10 + i * 70, 100+j * 34, randomType, randomState );
 			}
 		}
     // Pour créer les murs
-    upperWall = new Object ( "HorizontalWall.png" , 10,10, 0,0);
-    leftWall = new Object ( "VerticalWall.png" , 10,10+upperWall.h, 0,0);
-    rightWall = new Object ( "VerticalWall.png" , 10+lesBriques.length * 70,10+upperWall.h, 0,0);
+    upperWall = new Object ( "HorizontalWall.png" , 10000,10, 0,0);
+    leftWall = new Object ( "VerticalWall.png" , 10000,10+upperWall.h, 0,0);
+    rightWall = new Object ( "VerticalWall.png" , 10000+lesBriques.length * 70,10+upperWall.h, 0,0);
 
 
     // Create the Paddle
@@ -182,6 +181,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		GameOverImage = T.getImage("GameOver.jpg");
 		WinImage= T.getImage("WinImage.jpg");
 		IntroImage = T.getImage("IntroImage.gif");
+		
 
 		//ActionListener
 		Montimer = new Timer(TempsTimer_ms,this);
@@ -237,7 +237,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		if (play){
 			this.setTitle("Time : " + String.valueOf(s-gameStartTime) + "   |  Lives "+ String.valueOf(NbVies));
 			gestionPaddle();
-			//gestionPowerUp();
+			gestionPowerUp();
 			if (!newBall){
 				gestionBall();
 			}else{
@@ -303,7 +303,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		}
 	}
 
-	/*public void gestionPowerUp(){
+	public void gestionPowerUp(){
 		for (int i=0; i< lesPowerUps.length; i++){
 			if (lesPowerUps[i].active){
 				lesPowerUps[i].setX(lesPowerUps[i].x);
@@ -324,11 +324,12 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 			}
 		}
-	}*/
+	}
 
 	public void gestionBall(){
 
 		Ball.move(Ecran);
+		win = true;
 
   	for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j < lesBriques[0].length;  j++){
@@ -336,7 +337,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
           if (Ball.bounce(lesBriques[i][j])){
 						music("CollisionMusic.wav");
 						if(lesBriques[i][j].Type == "PowerUp"){
-							/*PowerUp newPowerUp = new PowerUp( "fasterBall", lesBriques[i][j].x,lesBriques[i][j].y);
+							PowerUp newPowerUp = new PowerUp( "fasterBall", lesBriques[i][j].x,lesBriques[i][j].y);
 							System.out.println ( "nouveau fasterBall créé. vitesse :"+ newPowerUp.vitesse +"direction : "+newPowerUp.direction);
 							PowerUp lesNewPowerUps[] = new PowerUp[lesPowerUps.length+1];
 							for ( int k =0; k<lesPowerUps.length; k++){
@@ -351,21 +352,25 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 								}else{
 									System.out.println("   is not active");
 								}
-							}*/
+							}
 						}
 					}
-        }
-				if( lesBriques[i][j].state == 0){
-					nbDestroyedBricks+=1;
 				}
+					
+					
+				if( lesBriques[i][j].state > 0){
+					win = false;
+				}
+				if (win) play = false;
+				
       }
 		}
-		if (nbDestroyedBricks== (lesBriques.length*lesBriques[0].length - nbNormalBricks)){
+		/*if (nbDestroyedBricks== (lesBriques.length*lesBriques[0].length - nbNormalBricks)){
 			win= true;
 		}
 		if (win==false) nbDestroyedBricks=0;
 		System.out.println("nbDestroyedBricks= "+ nbDestroyedBricks);
-
+		*/
     if (Ball.bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth)){
 			music("PaddleBounceMusic.wav");
 		}
@@ -380,6 +385,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			Ball.setY((int)(screenHeight*0.5));
 			newBall = true;
 			Ball.direction = (float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0);
+			Ball.vitesse = 10;
 			if (NbVies == 0) {
 				play = false;
 				gameOver = true;
@@ -507,12 +513,12 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					}
 				}
 			}
-			/*for (int i = 0 ; i<lesPowerUps.length ; i++){
+			for (int i = 0 ; i<lesPowerUps.length ; i++){
 				if (lesPowerUps[i].active){
 
 					buffer.drawImage(lesPowerUps[i].image, lesPowerUps[i].x,lesPowerUps[i].y,this);
 				}
-			}*/
+			}
       buffer.drawImage(Ball.image, Ball.x,Ball.y,this);
 			buffer.drawImage(leftWall.image, leftWall.x,leftWall.y,this);
       buffer.drawImage(rightWall.image, rightWall.x,rightWall.y,this);

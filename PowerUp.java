@@ -8,7 +8,7 @@ public class PowerUp extends Object{
 
 
 	public PowerUp(String T, int ax, int ay){
-		super( ax, ay, (float)(Math.PI/2), (float)5);
+		super( ax, ay, (float)(80*Math.PI*2.0/360.0), (float)5);
 		Type=T;
 		try {
              image= ImageIO.read(new File(Type+".png"));
