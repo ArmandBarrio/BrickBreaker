@@ -68,8 +68,9 @@ public class  Brick extends Object {
 
 		/* Guillaume, I didn't quite get the point of this, it seems to work fine without it
 		 * It works now because of the second constructor without an image for objects  G.
-		 *
-		 *  (state == 0){
+		 * It is actually quite practical. I'm using it to initialize invisible bricks to fill-up my array without consequences
+		 */
+		  if(state == 0){
 			// this is a random image that is not displayed
 			try {
              image= ImageIO.read(new File("Paddle.png"));
@@ -79,7 +80,7 @@ public class  Brick extends Object {
             System.out.println("Paddle.jpg"+" introuvable !");
             System.exit(0);
             }
-		} */
+		} 
 
 		h= image.getHeight(null);
         l= image.getWidth(null);

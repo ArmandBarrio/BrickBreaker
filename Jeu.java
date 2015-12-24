@@ -34,7 +34,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	public long gameStartTime;
 
   //Add the Object array
-  public Brick lesBriques[][]= new Brick[20][5];
+  public Brick lesBriques[][]= new Brick[8][14];
   public PowerUp lesPowerUps[] = new PowerUp[0];
   //PowerUp firstPowerUp;
 
@@ -119,7 +119,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 
         // Pour tester les briques, initialisation
-    for (int i = 0; i < lesBriques.length; i++){
+    /*for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j< lesBriques[0].length; j++){
 				double r = Math.random();
 				String randomType = "Normal";
@@ -132,6 +132,8 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				lesBriques[i][j] = new Brick ( 10 + i * 70, 100+j * 34, randomType, randomState );
 			}
 		}
+		*/
+		customLevelChristmas(); 
     // Pour créer les murs
     upperWall = new Object ( "HorizontalWall.png" , 10000,10, 0,0);
     leftWall = new Object ( "VerticalWall.png" , 10000,10+upperWall.h, 0,0);
@@ -325,6 +327,38 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			}
 		}
 	}
+	public void customLevelChristmas(){
+		for(int i=0; i <7; i++){
+			for (int j =0; j<14;j++){
+				lesBriques[i][j]= new Brick ( 400 + i*70, 150+j*34, "Normal", 3);
+			}
+		} 
+		for ( int i = 0;i<7;i++){ 
+			lesBriques[i][6]= new Brick ( 400 + i*70, 150+6*34, "PowerUp", 1);
+			lesBriques[i][7]= new Brick ( 400 + i*70, 150+7*34, "PowerUp", 1);
+		}
+		for ( int j = 0; j< 14; j++){
+			lesBriques[3][j]= new Brick ( 400 + 3*70, 150+j*34, "PowerUp", 1);
+		}
+		lesBriques[7][0]= new Brick ( 400 + 3*70, 150-34, "Unbreakable", 1);
+		lesBriques[7][1]= new Brick ( 400 + 2*70, 150-2*34, "Unbreakable", 1);
+		lesBriques[7][2]= new Brick ( 400 + 4*70, 150-2*34, "Unbreakable", 1);
+		lesBriques[7][3]= new Brick ( 400 + 5*70, 150-2*34, "Unbreakable", 1);
+		lesBriques[7][4]= new Brick ( 400 + 1*70, 150-2*34, "Unbreakable", 1);
+		lesBriques[7][5]= new Brick ( 400 + 0*70, 150-3*34, "Unbreakable", 1);
+		lesBriques[7][6]= new Brick ( 400 + 6*70, 150-3*34, "Unbreakable", 1);
+		lesBriques[7][7]= new Brick ( 400 + 6*70, 150-4*34, "Unbreakable", 1);
+		lesBriques[7][8]= new Brick ( 400 + 0*70, 150-4*34, "Unbreakable", 1);
+		lesBriques[7][9]= new Brick ( 400 + 1*70, 150-4*34, "Unbreakable", 1);
+		lesBriques[7][12]= new Brick ( 400 + 5*70, 150-4*34, "Unbreakable", 1);		
+		lesBriques[7][10]= new Brick ( 400 + 4*70, 150-3*34, "Unbreakable", 1);
+		lesBriques[7][11]= new Brick ( 400 + 2*70, 150-3*34, "Unbreakable", 1);
+		lesBriques[7][13]= new Brick ( 0, 0, "Normal", 0);
+		
+		
+	}
+	
+		
 
 	public void gestionBall(){
 
