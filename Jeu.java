@@ -67,6 +67,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	//Screen Dimension
 	public int screenWidth;
 	public int screenHeight;
+	public boolean onFire = false;
 
 	//paddle size
 	public int paddleWidth = 200;
@@ -131,8 +132,8 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 				lesBriques[i][j] = new Brick ( 10 + i * 70, 100+j * 34, randomType, randomState );
 			}
-		}
-		*/
+		}*/
+		
 		customLevelChristmas(); 
     // Pour créer les murs
     upperWall = new Object ( "HorizontalWall.png" , 10000,10, 0,0);
@@ -316,13 +317,24 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					lesPowerUps[i].active = false;
 					// each power up has its effect
 					if (lesPowerUps[i].Type == "fasterBall"){
-						Ball.vitesse = (float)( Ball.vitesse+5);
+						Ball.vitesse = (float)( Ball.vitesse*1.1);
 						System.out.println ( " la vitesse de la balle est : " +Ball.vitesse);
 					}
 					if(lesPowerUps[i].Type == "slowerBall" ){
-						Ball.vitesse = (float)(Ball.vitesse-5);
+						Ball.vitesse = (float)(Ball.vitesse*0.9);
 						System.out.println ( " la vitesse de la balle est : " +Ball.vitesse);
 					}
+					if (lesPowerUps[i].Type== "largerPaddle"){
+						paddleWidth=(int)(paddleWidth*1.2);
+					}
+					if (lesPowerUps[i].Type== "smallerPaddle"){
+						paddleWidth=(int)(paddleWidth*0.8);
+					}
+					if (lesPowerUps[i].Type== "fireBall"){
+						onFire = true;
+						Ball.vitesse = 20;
+					}
+					
 				}
 			}
 		}
@@ -365,39 +377,67 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		Ball.move(Ecran);
 		win = true;
 
-  	for (int i = 0; i < lesBriques.length; i++){
+		for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j < lesBriques[0].length;  j++){
-        if( lesBriques[i][j].state != 0){
-          if (Ball.bounce(lesBriques[i][j])){
-						music("CollisionMusic.wav");
-						if(lesBriques[i][j].Type == "PowerUp"){
-							PowerUp newPowerUp = new PowerUp( "fasterBall", lesBriques[i][j].x,lesBriques[i][j].y);
-							System.out.println ( "nouveau fasterBall créé. vitesse :"+ newPowerUp.vitesse +"direction : "+newPowerUp.direction);
-							PowerUp lesNewPowerUps[] = new PowerUp[lesPowerUps.length+1];
-							for ( int k =0; k<lesPowerUps.length; k++){
-								lesNewPowerUps[k]= lesPowerUps[k];
-							}
-							lesNewPowerUps[lesPowerUps.length] = newPowerUp;
-							lesPowerUps=lesNewPowerUps;
-							for (int k =0; k<lesPowerUps.length;k++){
-								System.out.print (lesPowerUps[k].Type + "position :" +lesNewPowerUps[k].x+";"+lesNewPowerUps[k].y);
-								if (lesNewPowerUps[k].active){
-									System.out.println( "  is active");
-								}else{
-									System.out.println("   is not active");
+				if( lesBriques[i][j].state != 0){
+				//si la balle n'est pas en feu !
+					if (!onFire){
+						if (Ball.bounce(lesBriques[i][j])){
+							music("CollisionMusic.wav");
+							if(lesBriques[i][j].Type == "PowerUp"){
+								String randomPowerUp = randomPowerUp();
+								PowerUp newPowerUp = new PowerUp( randomPowerUp, lesBriques[i][j].x,lesBriques[i][j].y);
+								System.out.println ( "nouveau "+randomPowerUp +"créé. vitesse :"+ newPowerUp.vitesse +"direction : "+newPowerUp.direction);
+								PowerUp lesNewPowerUps[] = new PowerUp[lesPowerUps.length+1];
+								for ( int k =0; k<lesPowerUps.length; k++){
+									lesNewPowerUps[k]= lesPowerUps[k];
+								}
+								lesNewPowerUps[lesPowerUps.length] = newPowerUp;
+								lesPowerUps=lesNewPowerUps;
+								for (int k =0; k<lesPowerUps.length;k++){
+									System.out.print (lesPowerUps[k].Type + "position :" +lesNewPowerUps[k].x+";"+lesNewPowerUps[k].y);
+									if (lesNewPowerUps[k].active){
+										System.out.println( "  is active");
+									}else{
+										System.out.println("   is not active");
+									}
 								}
 							}
 						}
+				// si la balle est en feu, elle ne rebondit pas sur les briques mais les detruit toutes...
+					}else {
+						
+						if (lesBriques[i][j].Collision(Ball)){
+							lesBriques[i][j].state = 0;
+							music("CollisionMusic.wav");
+							/*if(lesBriques[i][j].Type == "PowerUp"){
+								String randomPowerUp = randomPowerUp();
+								PowerUp newPowerUp = new PowerUp( randomPowerUp, lesBriques[i][j].x,lesBriques[i][j].y);
+								System.out.println ( "nouveau "+randomPowerUp +"créé. vitesse :"+ newPowerUp.vitesse +"direction : "+newPowerUp.direction);
+								PowerUp lesNewPowerUps[] = new PowerUp[lesPowerUps.length+1];
+								for ( int k =0; k<lesPowerUps.length; k++){
+									lesNewPowerUps[k]= lesPowerUps[k];
+								}
+								lesNewPowerUps[lesPowerUps.length] = newPowerUp;
+								lesPowerUps=lesNewPowerUps;
+								for (int k =0; k<lesPowerUps.length;k++){
+									System.out.print (lesPowerUps[k].Type + "position :" +lesNewPowerUps[k].x+";"+lesNewPowerUps[k].y);
+									if (lesNewPowerUps[k].active){
+										System.out.println( "  is active");
+									}else{
+										System.out.println("   is not active");
+									}
+								}
+							}*/
+						} 		
+					}				
+					if( lesBriques[i][j].state > 0){
+						win = false;
 					}
-				}
+					if (win) play = false;
 					
-					
-				if( lesBriques[i][j].state > 0){
-					win = false;
 				}
-				if (win) play = false;
-				
-      }
+			}
 		}
 		/*if (nbDestroyedBricks== (lesBriques.length*lesBriques[0].length - nbNormalBricks)){
 			win= true;
@@ -405,27 +445,40 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		if (win==false) nbDestroyedBricks=0;
 		System.out.println("nbDestroyedBricks= "+ nbDestroyedBricks);
 		*/
-    if (Ball.bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth)){
+		if (Ball.bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth)){
 			music("PaddleBounceMusic.wav");
 		}
 
-    if (Ball.bounceOffWalls(screenWidth, screenHeight)){
+		if (Ball.bounceOffWalls(screenWidth, screenHeight)){
 			music("WallBouncenMusic.wav");
 		}
 
-    if (Ball.y > screenHeight + 100){
+		if (Ball.y > screenHeight + 100){
 			NbVies--;
 			Ball.setX((int)(screenWidth*0.2));
 			Ball.setY((int)(screenHeight*0.5));
 			newBall = true;
 			Ball.direction = (float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0);
 			Ball.vitesse = 10;
+			onFire = false;
 			if (NbVies == 0) {
 				play = false;
 				gameOver = true;
 				music("GameOverMusic.wav");
 			}
 		}
+	}
+
+
+	public String randomPowerUp(){
+		double random = Math.random();
+		if (random<=0.3)return "fasterBall";
+		if (random>0.3 &&random<=0.5) return "slowerBall";		
+		if (random > 0.5 && random <= 0.7) return "smallerPaddle";
+		if (random>0.7 && random <= 0.85)return "largerPaddle";
+		if (random > 0.85)return "fireBall";
+		return "";
+		
 	}
 
 	public void keyTyped(KeyEvent e) { }
