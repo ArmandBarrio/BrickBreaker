@@ -85,25 +85,26 @@ public class  Object {
 		}
 		*/
 
-		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y <=(O.y + O.h + (int)(h*0.2)) && y >= (O.y + (int)(O.h*0.8))){
+		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y <=(O.y + O.h+(int)(O.h*0.4)) && y >= (O.y + O.h)){
 			direction = (float)(2 *(Math.PI) - direction);
 			System.out.println("Collision with BOTTOM OF BRICK" );
 			O.lowerState();
+      System.out.println("H="+O.h+ " L="+O.l);
 			return true;
 		}
-		if (x>= (O.x-l/2) && x <= (O.x + O.l -l/2) && y >=(O.y - (int)(h*1.2)) && y <(O.y -h + O.h/5)){
+		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y >=(O.y - h -(int)(O.h*0.4)) && y <=(O.y -h)){
 			direction = (float)(2 *(Math.PI) - direction);
 			System.out.println("Collision with TOP OF BRICK" );
 			O.lowerState();
 			return true;
 		}
-		if (x >= (O.x - l - (int)(l*0.2)) && x<= (O.x - l + (int)(l*0.2)) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2)){
+		if (x >= (O.x - l - (int)(l*0.4)) && x<= (O.x - l) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2)){
 			direction = (float)(Math.PI - direction);
 			System.out.println("Collision with LEFT OF BRICK" );
 			O.lowerState();
 			return true;
 		}
-		if (x <= (O.x + O.l + (int)(l*0.2)) && x>= (O.x + O.l - (int)(l*0.2)) && y >=(O.y - h) && y <(O.y -h + O.h)){
+		if (x <= (O.x + O.l +(int)(l*0.4)) && x>= (O.x + O.l) && y >=(O.y - h/2) && y <=(O.y -h/2 + O.h)){
 			direction = (float)(Math.PI - direction);
 			System.out.println("Collision with RIGHT OF BRICK" );
 			O.lowerState();

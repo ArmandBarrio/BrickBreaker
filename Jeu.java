@@ -108,7 +108,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	}
 
 	public Jeu(){
-		System.out.println("C'est parti");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 		screenWidth = (int)(screenSize.getWidth());
@@ -181,7 +180,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		GameOverImage = T.getImage("GameOver.jpg");
 		WinImage= T.getImage("WinImage.jpg");
 		IntroImage = T.getImage("IntroImage.gif");
-		
+
 
 		//ActionListener
 		Montimer = new Timer(TempsTimer_ms,this);
@@ -356,13 +355,13 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 						}
 					}
 				}
-					
-					
+
+
 				if( lesBriques[i][j].state > 0){
 					win = false;
 				}
 				if (win) play = false;
-				
+
       }
 		}
 		/*if (nbDestroyedBricks== (lesBriques.length*lesBriques[0].length - nbNormalBricks)){
