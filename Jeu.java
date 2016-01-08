@@ -119,7 +119,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 
         // Pour tester les briques, initialisation
-    /*for (int i = 0; i < lesBriques.length; i++){
+		for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j< lesBriques[0].length; j++){
 				double r = Math.random();
 				String randomType = "Normal";
@@ -131,9 +131,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 				lesBriques[i][j] = new Brick ( 10 + i * 70, 100+j * 34, randomType, randomState );
 			}
-		}*/
+		}
 		
-		customLevelChristmas(); 
+		//customLevelChristmas(); 
     // Pour créer les murs
     upperWall = new Object ( "HorizontalWall.png" , 10000,10, 0,0);
     leftWall = new Object ( "VerticalWall.png" , 10000,10+upperWall.h, 0,0);
@@ -433,7 +433,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					if( lesBriques[i][j].state > 0){
 						win = false;
 					}
-<<<<<<< HEAD
 				}
 
 
@@ -442,20 +441,10 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 				if (win) play = false;
 
-      }
-=======
-					if (win) play = false;
+				}
+				if (win) play = false;
 					
 				}
-			}
->>>>>>> 0013dcf8762f47c74798a1595495de98652b5457
-		}
-		/*if (nbDestroyedBricks== (lesBriques.length*lesBriques[0].length - nbNormalBricks)){
-			win= true;
-		}
-		if (win==false) nbDestroyedBricks=0;
-		System.out.println("nbDestroyedBricks= "+ nbDestroyedBricks);
-		*/
 		if (Ball.bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth)){
 			music("PaddleBounceMusic.wav");
 		}
@@ -626,6 +615,13 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 		if (gameOver){
 			buffer.drawImage(GameOverImage,0,0,screenWidth, screenHeight, this);
+			for ( int i = 0; i< lesBriques.length; i++){
+				for (int j = 0 ; j < lesBriques[0].length;  j++){
+					if (lesBriques[i][j].Type=="Normal"){
+						lesBriques[i][j].state =(int)(Math.random()*3 +1);
+					}
+				}
+			}
 		}
 		if (win){
 			buffer.drawImage(WinImage, 0,0, screenWidth, screenHeight, this);
