@@ -367,9 +367,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		lesBriques[7][13]= new Brick ( 0, 0, "Normal", 0);
 		
 		
-	}
-	
-		
+	}	
 
 	public void gestionBall(){
 
