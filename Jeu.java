@@ -185,7 +185,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		Montimer = new Timer(TempsTimer_ms,this);
 		Montimer.start();
 
-    //Buffer and all
+		//Buffer and all
 		ArrierePlan = new BufferedImage(Ecran.width,Ecran.height,BufferedImage.TYPE_INT_RGB);
 		buffer = ArrierePlan.getGraphics();
 
@@ -334,6 +334,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			}
 		}
 	}
+	
 	public void customLevelChristmas(){
 		for(int i=0; i <7; i++){
 			for (int j =0; j<14;j++){
@@ -470,7 +471,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		}
 	}
 
-
 	public String randomPowerUp(){
 		double random = Math.random();
 		/*if (random<=0.3)return "fasterBall";
@@ -564,6 +564,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			Paddle.x = e.getX() - paddleWidth/2;
 		}
 	}
+	
 	public void mouseDragged(MouseEvent e) {
       throw new UnsupportedOperationException("Not supported yet.");
 	}
