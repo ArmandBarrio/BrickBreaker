@@ -326,7 +326,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					}
 					if (lesPowerUps[i].Type== "fireBall"){
 						onFire = true;
-						Ball.vitesse = 20;
+						Ball.vitesse = 2*(5/TempsTimer_ms);
 					}
 					
 				}
@@ -473,12 +473,13 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 	public String randomPowerUp(){
 		double random = Math.random();
-		if (random<=0.3)return "fasterBall";
+		/*if (random<=0.3)return "fasterBall";
 		if (random>0.3 &&random<=0.5) return "slowerBall";		
-		//if (random > 0.5 && random <= 0.7) return "smallerPaddle";
-		if (random>0.5 && random <= 1)return "largerPaddle";
-		//if (random > 0.85)return "fireBall";
-		return "";
+		if (random > 0.5 && random <= 0.7) return "smallerPaddle";
+		if (random>0.7 && random <= 0.85)return "largerPaddle";
+		if (random > 0.85)return "fireBall";
+        */
+		return "fireBall";
 		
 	}
 
