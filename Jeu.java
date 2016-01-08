@@ -1,4 +1,4 @@
-import javax.swing.*;
+﻿import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -431,7 +431,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					if( lesBriques[i][j].state > 0){
 						win = false;
 					}
-<<<<<<< HEAD
 				}
 
 
