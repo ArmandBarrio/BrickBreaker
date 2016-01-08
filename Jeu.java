@@ -1,4 +1,4 @@
-import javax.swing.*;
+   import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -61,7 +61,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	public Image GameOverImage;
 	public Image startScreenWallpaper;
 	public Image paddle;
-  public Image brick;
+	public Image brick;
 	public Image WinImage;
 
 	//Screen Dimension
@@ -77,11 +77,12 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	public boolean intro = true;
 	public boolean startScreen = false;
 	public boolean play = false;
-  public boolean gameOver = false;
+	public boolean gameOver = false;
 	public boolean arrowUp = true;
 	public boolean win = false;
 	public int nbNormalBricks=0;
 	public int nbDestroyedBricks=0;
+	public long HighScore=0;
 
 
 
@@ -119,7 +120,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 
         // Pour tester les briques, initialisation
-		for (int i = 0; i < lesBriques.length; i++){
+		/*for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j< lesBriques[0].length; j++){
 				double r = Math.random();
 				String randomType = "Normal";
@@ -131,9 +132,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 				lesBriques[i][j] = new Brick ( 10 + i * 70, 100+j * 34, randomType, randomState );
 			}
-		}
+		}*/
 		
-		//customLevelChristmas(); 
+		customLevelChristmas(); 
     // Pour créer les murs
     upperWall = new Object ( "HorizontalWall.png" , 10000,10, 0,0);
     leftWall = new Object ( "VerticalWall.png" , 10000,10+upperWall.h, 0,0);
@@ -367,9 +368,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		lesBriques[7][13]= new Brick ( 0, 0, "Normal", 0);
 		
 		
-	}
-	
-		
+	}	
 
 	public void gestionBall(){
 
@@ -591,6 +590,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 		if (play){
 			buffer.drawImage(Wallpaper,0,0,this);
+			//buffer.drawString("Highscore="+Highscore,(int)(screenWidth * 0.05),(int)(screenHeight*0.05));
 			// afficher toutes les briques actives
       for ( int i = 0; i< lesBriques.length; i++){
 				for (int j = 0 ; j < lesBriques[0].length;  j++){
@@ -614,6 +614,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		}
 
 		if (gameOver){
+			HighScore=Temps;
 			buffer.drawImage(GameOverImage,0,0,screenWidth, screenHeight, this);
 			for ( int i = 0; i< lesBriques.length; i++){
 				for (int j = 0 ; j < lesBriques[0].length;  j++){
