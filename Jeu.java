@@ -140,12 +140,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
     rightWall = new Object ( "VerticalWall.png" , 10000+lesBriques.length * 70,10+upperWall.h, 0,0);
 
 
-    // Create the Paddle
-    Paddle = new Object ( "Paddle.png", (int)(screenWidth*0.3),(int)(screenHeight*0.9),10,10);
-
-    // test powerups
-    //firstPowerUp = new PowerUp("fasterBall", 100, 400);
-		//lesPowerUps[0] = firstPowerUp;
+    
 
 
 
@@ -159,11 +154,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
     lesBriques[3]=brique3;
     */
 
-    Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (285*Math.PI*2.0/360.0),10);
+    //Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (285*Math.PI*2.0/360.0),1);
 
     // Create the Paddle and Ball
     Paddle = new Object ( "Paddle.png", 400,(int)(screenHeight*0.9),10,10/TempsTimer_ms);
-    Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0),10/TempsTimer_ms);
+    Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0),5/TempsTimer_ms);
 
 
 		//Make Window appear
@@ -433,7 +428,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					if( lesBriques[i][j].state > 0){
 						win = false;
 					}
-<<<<<<< HEAD
 				}
 
 
@@ -442,14 +436,10 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 				if (win) play = false;
 
-      }
-=======
-					if (win) play = false;
+            }
+            if (win) play = false;
 					
-				}
-			}
->>>>>>> 0013dcf8762f47c74798a1595495de98652b5457
-		}
+        }
 		/*if (nbDestroyedBricks== (lesBriques.length*lesBriques[0].length - nbNormalBricks)){
 			win= true;
 		}
@@ -470,7 +460,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			Ball.setY((int)(screenHeight*0.5));
 			newBall = true;
 			Ball.direction = (float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0);
-			Ball.vitesse = 10;
+			Ball.vitesse = 5/TempsTimer_ms;
 			onFire = false;
 			if (NbVies == 0) {
 				play = false;
@@ -485,9 +475,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		double random = Math.random();
 		if (random<=0.3)return "fasterBall";
 		if (random>0.3 &&random<=0.5) return "slowerBall";		
-		if (random > 0.5 && random <= 0.7) return "smallerPaddle";
-		if (random>0.7 && random <= 0.85)return "largerPaddle";
-		if (random > 0.85)return "fireBall";
+		//if (random > 0.5 && random <= 0.7) return "smallerPaddle";
+		if (random>0.5 && random <= 1)return "largerPaddle";
+		//if (random > 0.85)return "fireBall";
 		return "";
 		
 	}
