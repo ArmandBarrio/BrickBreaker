@@ -1,4 +1,4 @@
-   import javax.swing.*;
+﻿import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -120,7 +120,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 
         // Pour tester les briques, initialisation
-		/*for (int i = 0; i < lesBriques.length; i++){
+		for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j< lesBriques[0].length; j++){
 				double r = Math.random();
 				String randomType = "Normal";
@@ -132,9 +132,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 				lesBriques[i][j] = new Brick ( 10 + i * 70, 100+j * 34, randomType, randomState );
 			}
-		}*/
+		}
 		
-		customLevelChristmas(); 
+		//customLevelChristmas(); 
     // Pour créer les murs
     upperWall = new Object ( "HorizontalWall.png" , 10000,10, 0,0);
     leftWall = new Object ( "VerticalWall.png" , 10000,10+upperWall.h, 0,0);
@@ -590,7 +590,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 		if (play){
 			buffer.drawImage(Wallpaper,0,0,this);
-			buffer.drawString("Highscore="+HighScore,(int)(screenWidth * 0.05),(int)(screenHeight*0.05));
+			buffer.drawString("Highscore="+Highscore,(int)(screenWidth * 0.05),(int)(screenHeight*0.05));
 			// afficher toutes les briques actives
       for ( int i = 0; i< lesBriques.length; i++){
 				for (int j = 0 ; j < lesBriques[0].length;  j++){
