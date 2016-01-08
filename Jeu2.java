@@ -1,4 +1,4 @@
-   import javax.swing.*;
+﻿import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -120,7 +120,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 
         // Pour tester les briques, initialisation
-		/*for (int i = 0; i < lesBriques.length; i++){
+		for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j< lesBriques[0].length; j++){
 				double r = Math.random();
 				String randomType = "Normal";
@@ -132,16 +132,21 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 				lesBriques[i][j] = new Brick ( 10 + i * 70, 100+j * 34, randomType, randomState );
 			}
-		}*/
+		}
 		
-		customLevelChristmas(); 
+		//customLevelChristmas(); 
     // Pour créer les murs
     upperWall = new Object ( "HorizontalWall.png" , 10000,10, 0,0);
     leftWall = new Object ( "VerticalWall.png" , 10000,10+upperWall.h, 0,0);
     rightWall = new Object ( "VerticalWall.png" , 10000+lesBriques.length * 70,10+upperWall.h, 0,0);
 
 
-    
+    // Create the Paddle
+    Paddle = new Object ( "Paddle.png", (int)(screenWidth*0.3),(int)(screenHeight*0.9),10,10);
+
+    // test powerups
+    //firstPowerUp = new PowerUp("fasterBall", 100, 400);
+		//lesPowerUps[0] = firstPowerUp;
 
 
 
@@ -155,11 +160,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
     lesBriques[3]=brique3;
     */
 
-    //Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (285*Math.PI*2.0/360.0),1);
+    Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (285*Math.PI*2.0/360.0),10);
 
     // Create the Paddle and Ball
     Paddle = new Object ( "Paddle.png", 400,(int)(screenHeight*0.9),10,10/TempsTimer_ms);
-    Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0),5/TempsTimer_ms);
+    Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0),10/TempsTimer_ms);
 
 
 		//Make Window appear
@@ -327,7 +332,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					}
 					if (lesPowerUps[i].Type== "fireBall"){
 						onFire = true;
-						Ball.vitesse = 2*(5/TempsTimer_ms);
+						Ball.vitesse = 20;
 					}
 					
 				}
@@ -435,23 +440,10 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 				if (win) play = false;
 
-<<<<<<< HEAD
-            }
-            if (win) play = false;
-					
-        }
-		/*if (nbDestroyedBricks== (lesBriques.length*lesBriques[0].length - nbNormalBricks)){
-			win= true;
-		}
-		if (win==false) nbDestroyedBricks=0;
-		System.out.println("nbDestroyedBricks= "+ nbDestroyedBricks);
-		*/
-=======
 				}
 				if (win) play = false;
 					
 				}
->>>>>>> 3a4108c978f268ccf74ed1c28b5b936470aa514a
 		if (Ball.bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth)){
 			music("PaddleBounceMusic.wav");
 		}
@@ -466,7 +458,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			Ball.setY((int)(screenHeight*0.5));
 			newBall = true;
 			Ball.direction = (float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0);
-			Ball.vitesse = 5/TempsTimer_ms;
+			Ball.vitesse = 10;
 			onFire = false;
 			if (NbVies == 0) {
 				play = false;
@@ -479,13 +471,12 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 	public String randomPowerUp(){
 		double random = Math.random();
-		/*if (random<=0.3)return "fasterBall";
+		if (random<=0.3)return "fasterBall";
 		if (random>0.3 &&random<=0.5) return "slowerBall";		
 		if (random > 0.5 && random <= 0.7) return "smallerPaddle";
 		if (random>0.7 && random <= 0.85)return "largerPaddle";
 		if (random > 0.85)return "fireBall";
-        */
-		return "fireBall";
+		return "";
 		
 	}
 
@@ -599,7 +590,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 		if (play){
 			buffer.drawImage(Wallpaper,0,0,this);
-			buffer.drawString("Highscore="+HighScore,(int)(screenWidth * 0.05),(int)(screenHeight*0.05));
+			buffer.drawString("Highscore="+Highscore,(int)(screenWidth * 0.05),(int)(screenHeight*0.05));
 			// afficher toutes les briques actives
       for ( int i = 0; i< lesBriques.length; i++){
 				for (int j = 0 ; j < lesBriques[0].length;  j++){
