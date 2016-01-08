@@ -1,4 +1,4 @@
-   import javax.swing.*;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -104,6 +104,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	//Font management
 	Font font;
 	Font font2;
+	Font font3;
 
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
@@ -589,8 +590,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		}
 
 		if (play){
+			font3 = font.deriveFont(1,(int)(screenHeight*0.05));
+			buffer.setFont(font3);
+			buffer.setColor(Color.white);
 			buffer.drawImage(Wallpaper,0,0,this);
-			buffer.drawString("Highscore="+HighScore,(int)(screenWidth * 0.05),(int)(screenHeight*0.05));
+			buffer.drawString("Highscore="+HighScore,10,80);
 			// afficher toutes les briques actives
       for ( int i = 0; i< lesBriques.length; i++){
 				for (int j = 0 ; j < lesBriques[0].length;  j++){
@@ -614,7 +618,9 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		}
 
 		if (gameOver){
-			HighScore=Temps;
+			if (Temps/100-gameStartTime)>HighScore){
+				Highscore=(Temps/100-gameStartTime);
+			}
 			buffer.drawImage(GameOverImage,0,0,screenWidth, screenHeight, this);
 			for ( int i = 0; i< lesBriques.length; i++){
 				for (int j = 0 ; j < lesBriques[0].length;  j++){
