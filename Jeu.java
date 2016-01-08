@@ -435,7 +435,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 				if (win) play = false;
 
-<<<<<<< HEAD
             }
             if (win) play = false;
 					
@@ -446,12 +445,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		if (win==false) nbDestroyedBricks=0;
 		System.out.println("nbDestroyedBricks= "+ nbDestroyedBricks);
 		*/
-=======
-				}
-				if (win) play = false;
-					
-				}
->>>>>>> 3a4108c978f268ccf74ed1c28b5b936470aa514a
+
 		if (Ball.bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth)){
 			music("PaddleBounceMusic.wav");
 		}
