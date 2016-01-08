@@ -1,4 +1,4 @@
-import javax.swing.*;
+﻿import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -362,9 +362,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		lesBriques[7][13]= new Brick ( 0, 0, "Normal", 0);
 		
 		
-	}
-	
-		
+	}	
 
 	public void gestionBall(){
 
