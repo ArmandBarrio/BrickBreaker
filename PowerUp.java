@@ -13,18 +13,13 @@ public class PowerUp extends Object{
 		try {
              image= ImageIO.read(new File(Type+".png"));
              }
-         catch(Exception err)
-             {
+        catch(Exception err){
             System.out.println(Type+".png"+" introuvable !");
             System.exit(0);
             }
-            h= image.getHeight(null);
-			l= image.getWidth(null);
-			BoxObject = new Rectangle(x,y,l,h);
-			active = true;
-
+		h= image.getHeight(null);
+		l= image.getWidth(null);
+		BoxObject = new Rectangle(x,y,l,h);
+		active = true;
 	}
-
-
-
 }

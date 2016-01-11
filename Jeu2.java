@@ -1,4 +1,4 @@
-   import javax.swing.*;
+﻿import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -82,11 +82,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	public boolean win = false;
 	public int nbNormalBricks=0;
 	public int nbDestroyedBricks=0;
-<<<<<<< HEAD
-	public float Highscore=0;
-=======
 	public long HighScore=0;
->>>>>>> cf36f995330d5222cd5e902b5a598b62860b8322
 
 
 
@@ -108,7 +104,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	//Font management
 	Font font;
 	Font font2;
-	Font font3;
 
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
@@ -125,7 +120,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 
         // Pour tester les briques, initialisation
-		/*for (int i = 0; i < lesBriques.length; i++){
+		for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j< lesBriques[0].length; j++){
 				double r = Math.random();
 				String randomType = "Normal";
@@ -137,16 +132,21 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				}
 				lesBriques[i][j] = new Brick ( 10 + i * 70, 100+j * 34, randomType, randomState );
 			}
-		}*/
-
-		customLevelChristmas();
+		}
+		
+		//customLevelChristmas(); 
     // Pour créer les murs
     upperWall = new Object ( "HorizontalWall.png" , 10000,10, 0,0);
     leftWall = new Object ( "VerticalWall.png" , 10000,10+upperWall.h, 0,0);
     rightWall = new Object ( "VerticalWall.png" , 10000+lesBriques.length * 70,10+upperWall.h, 0,0);
 
 
-    
+    // Create the Paddle
+    Paddle = new Object ( "Paddle.png", (int)(screenWidth*0.3),(int)(screenHeight*0.9),10,10);
+
+    // test powerups
+    //firstPowerUp = new PowerUp("fasterBall", 100, 400);
+		//lesPowerUps[0] = firstPowerUp;
 
 
 
@@ -160,11 +160,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
     lesBriques[3]=brique3;
     */
 
-    //Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (285*Math.PI*2.0/360.0),1);
+    Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (285*Math.PI*2.0/360.0),10);
 
     // Create the Paddle and Ball
     Paddle = new Object ( "Paddle.png", 400,(int)(screenHeight*0.9),10,10/TempsTimer_ms);
-    Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0),5/TempsTimer_ms);
+    Ball = new Object("Ball.png", (int)(screenWidth*0.2),(int)(screenHeight*0.5),(float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0),10/TempsTimer_ms);
 
 
 		//Make Window appear
@@ -190,7 +190,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		Montimer = new Timer(TempsTimer_ms,this);
 		Montimer.start();
 
-		//Buffer and all
+    //Buffer and all
 		ArrierePlan = new BufferedImage(Ecran.width,Ecran.height,BufferedImage.TYPE_INT_RGB);
 		buffer = ArrierePlan.getGraphics();
 
@@ -332,21 +332,20 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					}
 					if (lesPowerUps[i].Type== "fireBall"){
 						onFire = true;
-						Ball.vitesse = 2*(5/TempsTimer_ms);
+						Ball.vitesse = 20;
 					}
-
+					
 				}
 			}
 		}
 	}
-	
 	public void customLevelChristmas(){
 		for(int i=0; i <7; i++){
 			for (int j =0; j<14;j++){
 				lesBriques[i][j]= new Brick ( 400 + i*70, 150+j*34, "Normal", 3);
 			}
-		}
-		for ( int i = 0;i<7;i++){
+		} 
+		for ( int i = 0;i<7;i++){ 
 			lesBriques[i][6]= new Brick ( 400 + i*70, 150+6*34, "PowerUp", 1);
 			lesBriques[i][7]= new Brick ( 400 + i*70, 150+7*34, "PowerUp", 1);
 		}
@@ -363,21 +362,13 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		lesBriques[7][7]= new Brick ( 400 + 6*70, 150-4*34, "Unbreakable", 1);
 		lesBriques[7][8]= new Brick ( 400 + 0*70, 150-4*34, "Unbreakable", 1);
 		lesBriques[7][9]= new Brick ( 400 + 1*70, 150-4*34, "Unbreakable", 1);
-		lesBriques[7][12]= new Brick ( 400 + 5*70, 150-4*34, "Unbreakable", 1);
+		lesBriques[7][12]= new Brick ( 400 + 5*70, 150-4*34, "Unbreakable", 1);		
 		lesBriques[7][10]= new Brick ( 400 + 4*70, 150-3*34, "Unbreakable", 1);
 		lesBriques[7][11]= new Brick ( 400 + 2*70, 150-3*34, "Unbreakable", 1);
 		lesBriques[7][13]= new Brick ( 0, 0, "Normal", 0);
-<<<<<<< HEAD
-
-
-	}
-
-
-=======
 		
 		
 	}	
->>>>>>> cf36f995330d5222cd5e902b5a598b62860b8322
 
 	public void gestionBall(){
 
@@ -413,7 +404,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 						}
 				// si la balle est en feu, elle ne rebondit pas sur les briques mais les detruit toutes...
 					}else {
-
+						
 						if (lesBriques[i][j].Collision(Ball)){
 							lesBriques[i][j].state = 0;
 							music("CollisionMusic.wav");
@@ -436,8 +427,8 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 									}
 								}
 							}*/
-						}
-					}
+						} 		
+					}				
 					if( lesBriques[i][j].state > 0){
 						win = false;
 					}
@@ -448,24 +439,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					win = false;
 				}
 				if (win) play = false;
-<<<<<<< HEAD
-      }
-			if (win) play = false;
-		}
-=======
 
-            }
-            if (win) play = false;
+				}
+				if (win) play = false;
 					
-        }
->>>>>>> cf36f995330d5222cd5e902b5a598b62860b8322
-		/*if (nbDestroyedBricks== (lesBriques.length*lesBriques[0].length - nbNormalBricks)){
-			win= true;
-		}
-		if (win==false) nbDestroyedBricks=0;
-		System.out.println("nbDestroyedBricks= "+ nbDestroyedBricks);
-		*/
-
+				}
 		if (Ball.bounceOffPaddle(Paddle.x, Paddle.y, paddleWidth)){
 			music("PaddleBounceMusic.wav");
 		}
@@ -479,13 +457,8 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			Ball.setX((int)(screenWidth*0.2));
 			Ball.setY((int)(screenHeight*0.5));
 			newBall = true;
-<<<<<<< HEAD
-			Ball.direction = (float) ((Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0)%(2*Math.PI));
-			Ball.vitesse = 10;
-=======
 			Ball.direction = (float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0);
-			Ball.vitesse = 5/TempsTimer_ms;
->>>>>>> cf36f995330d5222cd5e902b5a598b62860b8322
+			Ball.vitesse = 10;
 			onFire = false;
 			if (NbVies == 0) {
 				play = false;
@@ -495,26 +468,16 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		}
 	}
 
+
 	public String randomPowerUp(){
 		double random = Math.random();
-<<<<<<< HEAD
 		if (random<=0.3)return "fasterBall";
-		if (random>0.3 &&random<=0.5) return "slowerBall";
-		if (random > 0.5 && random <= 0.7) return "smallerPaddle";
-		if (random>0.7 && random <= 0.85)return "largerPaddle";
-		if (random > 0.85)return "fireBall";
-		return "";
-
-=======
-		/*if (random<=0.3)return "fasterBall";
 		if (random>0.3 &&random<=0.5) return "slowerBall";		
 		if (random > 0.5 && random <= 0.7) return "smallerPaddle";
 		if (random>0.7 && random <= 0.85)return "largerPaddle";
 		if (random > 0.85)return "fireBall";
-        */
-		return "fireBall";
+		return "";
 		
->>>>>>> cf36f995330d5222cd5e902b5a598b62860b8322
 	}
 
 	public void keyTyped(KeyEvent e) { }
@@ -598,7 +561,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			Paddle.x = e.getX() - paddleWidth/2;
 		}
 	}
-	
 	public void mouseDragged(MouseEvent e) {
       throw new UnsupportedOperationException("Not supported yet.");
 	}
@@ -628,7 +590,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 		if (play){
 			buffer.drawImage(Wallpaper,0,0,this);
-			buffer.drawString("Highscore="+HighScore,(int)(screenWidth * 0.05),(int)(screenHeight*0.05));
+			buffer.drawString("Highscore="+Highscore,(int)(screenWidth * 0.05),(int)(screenHeight*0.05));
 			// afficher toutes les briques actives
       for ( int i = 0; i< lesBriques.length; i++){
 				for (int j = 0 ; j < lesBriques[0].length;  j++){
@@ -654,12 +616,6 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		if (gameOver){
 			HighScore=Temps;
 			buffer.drawImage(GameOverImage,0,0,screenWidth, screenHeight, this);
-<<<<<<< HEAD
-			if (Temps/100>2*Highscore){
-				Highscore=Temps/100-Highscore;
-			}
-			customLevelChristmas();
-=======
 			for ( int i = 0; i< lesBriques.length; i++){
 				for (int j = 0 ; j < lesBriques[0].length;  j++){
 					if (lesBriques[i][j].Type=="Normal"){
@@ -667,15 +623,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					}
 				}
 			}
->>>>>>> cf36f995330d5222cd5e902b5a598b62860b8322
 		}
 		if (win){
 			buffer.drawImage(WinImage, 0,0, screenWidth, screenHeight, this);
 		}
-		font3 = font.deriveFont(1,(int)(screenHeight*0.05));
-		buffer.setFont(font3);
-		buffer.setColor(Color.white);
-		buffer.drawString("Highscore" + Highscore,(int)(screenWidth*0.05),(int)(screenHeight*0.05));
+
 		g.drawImage(ArrierePlan,0,0,this);
 	}
 }
