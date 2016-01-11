@@ -80,7 +80,7 @@ public class  Brick extends Object {
             System.out.println("Paddle.jpg"+" introuvable !");
             System.exit(0);
             }
-		} 
+		}
 
 		h= image.getHeight(null);
         l= image.getWidth(null);

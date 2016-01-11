@@ -86,29 +86,29 @@ public class  Object {
 		*/
 
 		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y <=(O.y + O.h+(int)(O.h*0.4)) && y >= (O.y + O.h)){
-			direction = (float)(2 *(Math.PI) - direction);
+			direction = (float)((2 *(Math.PI) - direction)%(2*Math.PI));
 			System.out.println("Collision with BOTTOM OF BRICK" );
-			O.lowerState();
-      System.out.println("H="+O.h+ " L="+O.l);
+      O.lowerState();
+      System.out.println(direction);
 			return true;
 		}
 		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y >=(O.y - h -(int)(O.h*0.4)) && y <=(O.y -h)){
-			direction = (float)(2 *(Math.PI) - direction);
+			direction = (float)((2 *(Math.PI) - direction)%(2*Math.PI));
 			System.out.println("Collision with TOP OF BRICK" );
 			O.lowerState();
-			return true;
+      return true;
 		}
 		if (x >= (O.x - l - (int)(l*0.4)) && x<= (O.x - l) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2)){
-			direction = (float)(Math.PI - direction);
+			direction = (float)((Math.PI - direction)%(2*Math.PI));
 			System.out.println("Collision with LEFT OF BRICK" );
 			O.lowerState();
-			return true;
+      return true;
 		}
 		if (x <= (O.x + O.l +(int)(l*0.4)) && x>= (O.x + O.l) && y >=(O.y - h/2) && y <=(O.y -h/2 + O.h)){
-			direction = (float)(Math.PI - direction);
+			direction = (float)((Math.PI - direction)%(2*Math.PI));
 			System.out.println("Collision with RIGHT OF BRICK" );
 			O.lowerState();
-			return true;
+      return true;
 		}
 		return false;
 	}
@@ -118,7 +118,7 @@ public class  Object {
 				//direction = (float)(2 *(Math.PI) - direction);
 
 				//more complexe ball orientation through paddle collision
-				direction= (float) (270*Math.PI*2.0/360.0 - ((ax +length/2.0)-x)/(length/2.0) * 50.0*Math.PI*2.0/360.0);
+				direction= (float)((270*Math.PI*2.0/360.0 - ((ax +length/2.0)-x)/(length/2.0) * 50.0*Math.PI*2.0/360.0)%(2*Math.PI));
 				//System.out.println("Collision with PADDLE ");
 				return true;
 			}
@@ -128,15 +128,15 @@ public class  Object {
 		boolean bounceOffWalls(int screenW, int screenH){
 
 			if (y <= h ){
-				direction = (float)(2 *(Math.PI) - direction);
+				direction = (float)((2 *(Math.PI) - direction)%(2*Math.PI));
 				return true;
 			}
 			if (x< 0){
-				direction = (float)(Math.PI - direction);
+				direction = (float)((Math.PI - direction)%(2*Math.PI));
 				return true;
 			}
 			if (x > screenW - l ){
-				direction = (float)(Math.PI - direction);
+				direction = (float)((Math.PI - direction)%(2*Math.PI));
 				return true;
 			}
 			return false;

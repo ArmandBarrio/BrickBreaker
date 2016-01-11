@@ -82,6 +82,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	public boolean win = false;
 	public int nbNormalBricks=0;
 	public int nbDestroyedBricks=0;
+	public float Highscore=0;
 
 
 
@@ -103,6 +104,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	//Font management
 	Font font;
 	Font font2;
+	Font font3;
 
 	public static void main(String[] args){
 		Jeu Game = new Jeu();
@@ -132,8 +134,8 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 				lesBriques[i][j] = new Brick ( 10 + i * 70, 100+j * 34, randomType, randomState );
 			}
 		}*/
-		
-		customLevelChristmas(); 
+
+		customLevelChristmas();
     // Pour créer les murs
     upperWall = new Object ( "HorizontalWall.png" , 10000,10, 0,0);
     leftWall = new Object ( "VerticalWall.png" , 10000,10+upperWall.h, 0,0);
@@ -333,7 +335,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 						onFire = true;
 						Ball.vitesse = 20;
 					}
-					
+
 				}
 			}
 		}
@@ -343,8 +345,8 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			for (int j =0; j<14;j++){
 				lesBriques[i][j]= new Brick ( 400 + i*70, 150+j*34, "Normal", 3);
 			}
-		} 
-		for ( int i = 0;i<7;i++){ 
+		}
+		for ( int i = 0;i<7;i++){
 			lesBriques[i][6]= new Brick ( 400 + i*70, 150+6*34, "PowerUp", 1);
 			lesBriques[i][7]= new Brick ( 400 + i*70, 150+7*34, "PowerUp", 1);
 		}
@@ -361,15 +363,15 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		lesBriques[7][7]= new Brick ( 400 + 6*70, 150-4*34, "Unbreakable", 1);
 		lesBriques[7][8]= new Brick ( 400 + 0*70, 150-4*34, "Unbreakable", 1);
 		lesBriques[7][9]= new Brick ( 400 + 1*70, 150-4*34, "Unbreakable", 1);
-		lesBriques[7][12]= new Brick ( 400 + 5*70, 150-4*34, "Unbreakable", 1);		
+		lesBriques[7][12]= new Brick ( 400 + 5*70, 150-4*34, "Unbreakable", 1);
 		lesBriques[7][10]= new Brick ( 400 + 4*70, 150-3*34, "Unbreakable", 1);
 		lesBriques[7][11]= new Brick ( 400 + 2*70, 150-3*34, "Unbreakable", 1);
 		lesBriques[7][13]= new Brick ( 0, 0, "Normal", 0);
-		
-		
+
+
 	}
-	
-		
+
+
 
 	public void gestionBall(){
 
@@ -405,7 +407,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 						}
 				// si la balle est en feu, elle ne rebondit pas sur les briques mais les detruit toutes...
 					}else {
-						
+
 						if (lesBriques[i][j].Collision(Ball)){
 							lesBriques[i][j].state = 0;
 							music("CollisionMusic.wav");
@@ -428,12 +430,11 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 									}
 								}
 							}*/
-						} 		
-					}				
+						}
+					}
 					if( lesBriques[i][j].state > 0){
 						win = false;
 					}
-<<<<<<< HEAD
 				}
 
 
@@ -441,14 +442,8 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 					win = false;
 				}
 				if (win) play = false;
-
       }
-=======
-					if (win) play = false;
-					
-				}
-			}
->>>>>>> 0013dcf8762f47c74798a1595495de98652b5457
+			if (win) play = false;
 		}
 		/*if (nbDestroyedBricks== (lesBriques.length*lesBriques[0].length - nbNormalBricks)){
 			win= true;
@@ -469,7 +464,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 			Ball.setX((int)(screenWidth*0.2));
 			Ball.setY((int)(screenHeight*0.5));
 			newBall = true;
-			Ball.direction = (float) (Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0);
+			Ball.direction = (float) ((Math.random()*60*Math.PI*2.0/360.0 + 30*Math.PI*2.0/360.0)%(2*Math.PI));
 			Ball.vitesse = 10;
 			onFire = false;
 			if (NbVies == 0) {
@@ -484,12 +479,12 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 	public String randomPowerUp(){
 		double random = Math.random();
 		if (random<=0.3)return "fasterBall";
-		if (random>0.3 &&random<=0.5) return "slowerBall";		
+		if (random>0.3 &&random<=0.5) return "slowerBall";
 		if (random > 0.5 && random <= 0.7) return "smallerPaddle";
 		if (random>0.7 && random <= 0.85)return "largerPaddle";
 		if (random > 0.85)return "fireBall";
 		return "";
-		
+
 	}
 
 	public void keyTyped(KeyEvent e) { }
@@ -626,11 +621,18 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 
 		if (gameOver){
 			buffer.drawImage(GameOverImage,0,0,screenWidth, screenHeight, this);
+			if (Temps/100>2*Highscore){
+				Highscore=Temps/100-Highscore;
+			}
+			customLevelChristmas();
 		}
 		if (win){
 			buffer.drawImage(WinImage, 0,0, screenWidth, screenHeight, this);
 		}
-
+		font3 = font.deriveFont(1,(int)(screenHeight*0.05));
+		buffer.setFont(font3);
+		buffer.setColor(Color.white);
+		buffer.drawString("Highscore" + Highscore,(int)(screenWidth*0.05),(int)(screenHeight*0.05));
 		g.drawImage(ArrierePlan,0,0,this);
 	}
 }
