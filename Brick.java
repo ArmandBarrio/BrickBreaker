@@ -4,6 +4,7 @@
  * If -1, the brick will never reach -1, it is Unbreakable.
 
 */
+// test
 import java.awt.Rectangle;
 import java.io.File;
 import javax.imageio.ImageIO;
