@@ -61,7 +61,6 @@ public class  Object {
     }
 
     boolean bounce (Brick O){
-<<<<<<< HEAD
 
 		/*Armand : To try to fix this problem, I created the nextX and nextY functions
 		 * Did not work that well
@@ -98,20 +97,20 @@ public class  Object {
 			direction = (float)((2 *(Math.PI) - direction)%(2*Math.PI));
 			System.out.println("Collision with TOP OF BRICK" );
 			O.lowerState();
-      return true;
+            return true;
 		}
 		if (x >= (O.x - l - (int)(l*0.4)) && x<= (O.x - l) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2)){
 			direction = (float)((Math.PI - direction)%(2*Math.PI));
 			System.out.println("Collision with LEFT OF BRICK" );
 			O.lowerState();
-      return true;
+            return true;
 		}
 		if (x <= (O.x + O.l +(int)(l*0.4)) && x>= (O.x + O.l) && y >=(O.y - h/2) && y <=(O.y -h/2 + O.h)){
 			direction = (float)((Math.PI - direction)%(2*Math.PI));
 			System.out.println("Collision with RIGHT OF BRICK" );
 			O.lowerState();
-      return true;
-=======
+            return true;
+        }
 		
 		if (touche){ 
 		touche = false;
@@ -148,7 +147,6 @@ public class  Object {
 				touche = true;
 				return true;
 			}
->>>>>>> cf36f995330d5222cd5e902b5a598b62860b8322
 		}
 		return false;
 	}
