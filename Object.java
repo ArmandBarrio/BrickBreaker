@@ -43,6 +43,7 @@ public class  Object {
         direction=ad;
         vitesse=av;
         actif=true;
+        
 
     }
     // habile Armand le deuxieme constructeur !
@@ -85,34 +86,46 @@ public class  Object {
 			System.out.println("Collision with RIGHT OF BRICK" );
 		}
 		*/
-
-		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y <=(O.y + O.h+(int)(O.h*0.4)) && y >= (O.y + O.h)){
+        
+        
+        
+        
+        /* to try to fix the collision problem, I used the integer "touched" in Bricks which gets back to 0 at each collision
+         * and needs to be greater than a certain value for the brick to have an influence on the ball. At each call of gestion ball,
+         * the value of touched is incremented. Except it does not work...
+         */
+        
+		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y <=(O.y + O.h+(int)(O.h*0.4)) && y >= (O.y + O.h) && O.touched >= 25){
 			direction = (float)((2 *(Math.PI) - direction)%(2*Math.PI));
 			System.out.println("Collision with BOTTOM OF BRICK" );
-      O.lowerState();
-      System.out.println(direction);
+            O.lowerState();
+            O.touched = 0;
+            System.out.println(direction);
 			return true;
 		}
-		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y >=(O.y - h -(int)(O.h*0.4)) && y <=(O.y -h)){
+		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y >=(O.y - h -(int)(O.h*0.4)) && y <=(O.y -h)&& O.touched >= 25){
 			direction = (float)((2 *(Math.PI) - direction)%(2*Math.PI));
 			System.out.println("Collision with TOP OF BRICK" );
 			O.lowerState();
+            O.touched = 0;
             return true;
 		}
-		if (x >= (O.x - l - (int)(l*0.4)) && x<= (O.x - l) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2)){
+		if (x >= (O.x - l - (int)(l*0.4)) && x<= (O.x - l) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2) && O.touched >= 25){
 			direction = (float)((Math.PI - direction)%(2*Math.PI));
 			System.out.println("Collision with LEFT OF BRICK" );
 			O.lowerState();
+            O.touched = 0;
             return true;
 		}
-		if (x <= (O.x + O.l +(int)(l*0.4)) && x>= (O.x + O.l) && y >=(O.y - h/2) && y <=(O.y -h/2 + O.h)){
+		if (x <= (O.x + O.l +(int)(l*0.4)) && x>= (O.x + O.l) && y >=(O.y - h/2) && y <=(O.y -h/2 + O.h) && O.touched >= 25){
 			direction = (float)((Math.PI - direction)%(2*Math.PI));
 			System.out.println("Collision with RIGHT OF BRICK" );
 			O.lowerState();
+            O.touched = 0;
             return true;
         }
 		
-		if (touche){ 
+		/*if (touche){ 
 		touche = false;
 		return false;
 		
@@ -148,6 +161,7 @@ public class  Object {
 				return true;
 			}
 		}
+        */
 		return false;
 	}
         boolean bounceOffPaddle(int ax, int ay, int length){

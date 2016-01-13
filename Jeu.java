@@ -380,6 +380,7 @@ public class Jeu extends JFrame implements ActionListener,KeyListener,MouseMotio
 		for (int i = 0; i < lesBriques.length; i++){
 			for (int j = 0 ; j < lesBriques[0].length;  j++){
 				if( lesBriques[i][j].state != 0){
+                    lesBriques[i][j].touched = lesBriques[i][j].touched +1;
 				//si la balle n'est pas en feu !
 					if (!onFire){
 						if (Ball.bounce(lesBriques[i][j])){

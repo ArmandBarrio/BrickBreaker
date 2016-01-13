@@ -13,6 +13,7 @@ public class  Brick extends Object {
 
     public int state;
     public String Type;
+    int touched;
 
     void lowerState(){
 
@@ -31,6 +32,7 @@ public class  Brick extends Object {
 
         super( ax, ay, 0,0);
         this.state = s;
+        touched = 100;
         Type=T;
 
 
