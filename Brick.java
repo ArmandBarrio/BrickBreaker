@@ -4,6 +4,7 @@
  * If -1, the brick will never reach -1, it is Unbreakable.
 
 */
+// test
 import java.awt.Rectangle;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -12,6 +13,7 @@ public class  Brick extends Object {
 
     public int state;
     public String Type;
+    int touched;
 
     void lowerState(){
 
@@ -30,6 +32,7 @@ public class  Brick extends Object {
 
         super( ax, ay, 0,0);
         this.state = s;
+        touched = 100;
         Type=T;
 
 
@@ -80,7 +83,7 @@ public class  Brick extends Object {
             System.out.println("Paddle.jpg"+" introuvable !");
             System.exit(0);
             }
-		} 
+		}
 
 		h= image.getHeight(null);
         l= image.getWidth(null);

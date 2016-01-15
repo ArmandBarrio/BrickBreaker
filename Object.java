@@ -43,6 +43,7 @@ public class  Object {
         direction=ad;
         vitesse=av;
         actif=true;
+        
 
     }
     // habile Armand le deuxieme constructeur !
@@ -61,41 +62,106 @@ public class  Object {
     }
 
     boolean bounce (Brick O){
-		
-		if (touche){ 
-		touche = false;
-		return false;
-		}
-		
-		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y <=(O.y + O.h+(int)(O.h*0.4)) && y >= (O.y + O.h)){
+
+		/*Armand : To try to fix this problem, I created the nextX and nextY functions
+		 * Did not work that well
+
+		int ax = this.nextX();
+		int ay = this.nextY();
+
+		if (ax>= O.x && ax<= (O.x + O.l -l) && ay <=(O.y + O.h) && ay >(O.y + O.h/2)){
 			direction = (float)(2 *(Math.PI) - direction);
 			System.out.println("Collision with BOTTOM OF BRICK" );
-			O.lowerState();
-      System.out.println("H="+O.h+ " L="+O.l);
-			touche = true;
-			return true;
 		}
-		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y >=(O.y - h -(int)(O.h*0.4)) && y <=(O.y -h)){
+		if (ax>= O.x && ax<= (O.x + O.l -l) && ay >=(O.y - h) && ay <(O.y -h + O.h/2)){
 			direction = (float)(2 *(Math.PI) - direction);
 			System.out.println("Collision with TOP OF BRICK" );
-			O.lowerState();
-			touche = true;
-			return true;
 		}
-		if (x >= (O.x - l - (int)(l*0.4)) && x<= (O.x - l) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2)){
+		if (ax>= O.x && ax<= (O.x + O.l/2) && ay >=(O.y -h) && ay <(O.y -h + O.h)){
 			direction = (float)(Math.PI - direction);
 			System.out.println("Collision with LEFT OF BRICK" );
-			O.lowerState();
-			touche = true;
-			return true;
 		}
-		if (x <= (O.x + O.l +(int)(l*0.4)) && x>= (O.x + O.l) && y >=(O.y - h/2) && y <=(O.y -h/2 + O.h)){
+		if (ax <= (O.x + O.l) && ax>= (O.x + O.l/2) && ay >=(O.y - h) && ay <(O.y -h + O.h/2)){
 			direction = (float)(Math.PI - direction);
 			System.out.println("Collision with RIGHT OF BRICK" );
-			O.lowerState();
-			touche = true;
+		}
+		*/
+        
+        
+        
+        
+        /* to try to fix the collision problem, I used the integer "touched" in Bricks which gets back to 0 at each collision
+         * and needs to be greater than a certain value for the brick to have an influence on the ball. At each call of gestion ball,
+         * the value of touched is incremented. Except it does not work...
+         */
+        
+		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y <=(O.y + O.h+(int)(O.h*0.4)) && y >= (O.y + O.h) && ((direction<=Math.PI && direction >=0)||(direction<=(-Math.PI) && direction >=(-2*Math.PI)))){
+			direction = (float)((2 *(Math.PI) - direction)%(Math.PI));
+			System.out.println("Collision with BOTTOM OF BRICK" );
+            O.lowerState();
+            O.touched = 0;
+            System.out.println(direction);
 			return true;
 		}
+		if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y >=(O.y - h -(int)(O.h*0.4)) && y <=(O.y -h) && ((direction<=0 && direction>=-Math.PI)||(direction<=2*Math.PI && direction >=Math.PI))){
+			direction = (float)((2 *(Math.PI) - direction)%(Math.PI));
+			System.out.println("Collision with TOP OF BRICK" );
+			O.lowerState();
+            O.touched = 0;
+            return true;
+		}
+		if (x >= (O.x - l - (int)(l*0.4)) && x<= (O.x - l) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2) && ((direction<=Math.PI*0.5 && direction>=-0.5*Math.PI)||(direction>=1.5*Math.PI || direction<=(-1.5*Math.PI)))){
+			direction = (float)((Math.PI - direction)%(Math.PI));
+			System.out.println("Collision with LEFT OF BRICK" );
+			O.lowerState();
+            O.touched = 0;
+            return true;
+		}
+		if (x <= (O.x + O.l +(int)(l*0.4)) && x>= (O.x + O.l) && y >=(O.y - h/2) && y <=(O.y -h/2 + O.h) && ((direction>=(Math.PI*0.5) && direction<=(1.5*Math.PI))||(direction<=(-0.5*Math.PI) && direction>=(-1.5*Math.PI)))){
+			direction = (float)((Math.PI - direction)%(Math.PI));
+			System.out.println("Collision with RIGHT OF BRICK" );
+			O.lowerState();
+            O.touched = 0;
+            return true;
+        }
+		
+		/*if (touche){ 
+		touche = false;
+		return false;
+		
+		}else{
+		
+			if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y <=(O.y + O.h+(int)(O.h*0.4)) && y >= (O.y + O.h)){
+				direction = (float)(2 *(Math.PI) - direction);
+				System.out.println("Collision with BOTTOM OF BRICK" );
+				O.lowerState();
+				System.out.println("H="+O.h+ " L="+O.l);
+				touche = true;
+				return true;
+			}
+			if (x>= (O.x-l/2) && x<= (O.x + O.l -l/2) && y >=(O.y - h -(int)(O.h*0.4)) && y <=(O.y -h)){
+				direction = (float)(2 *(Math.PI) - direction);
+				System.out.println("Collision with TOP OF BRICK" );
+				O.lowerState();
+				touche = true;
+				return true;
+			}
+			if (x >= (O.x - l - (int)(l*0.4)) && x<= (O.x - l) && y >=(O.y -h/2) && y <=(O.y + O.h -h/2)){
+				direction = (float)(Math.PI - direction);
+				System.out.println("Collision with LEFT OF BRICK" );
+				O.lowerState();
+				touche = true;
+				return true;
+			}
+			if (x <= (O.x + O.l +(int)(l*0.4)) && x>= (O.x + O.l) && y >=(O.y - h/2) && y <=(O.y -h/2 + O.h)){
+				direction = (float)(Math.PI - direction);
+				System.out.println("Collision with RIGHT OF BRICK" );
+				O.lowerState();
+				touche = true;
+				return true;
+			}
+		}
+        */
 		return false;
 	}
         boolean bounceOffPaddle(int ax, int ay, int length){
@@ -104,8 +170,9 @@ public class  Object {
 				//direction = (float)(2 *(Math.PI) - direction);
 
 				//more complexe ball orientation through paddle collision
-				direction= (float) (270*Math.PI*2.0/360.0 - ((ax +length/2.0)-x)/(length/2.0) * 50.0*Math.PI*2.0/360.0);
-				//System.out.println("Collision with PADDLE ");
+				direction= (float)((270*Math.PI*2.0/360.0 - ((ax +length/2.0)-x)/(length/2.0) * 50.0*Math.PI*2.0/360.0)%(2*Math.PI));
+				System.out.println("Collision with PADDLE ");
+				System.out.println(direction);
 				return true;
 			}
 			return false;
@@ -114,15 +181,15 @@ public class  Object {
 		boolean bounceOffWalls(int screenW, int screenH){
 
 			if (y <= h ){
-				direction = (float)(2 *(Math.PI) - direction);
+				direction = (float)((2 *(Math.PI) - direction)%(2*Math.PI));
 				return true;
 			}
 			if (x< 0){
-				direction = (float)(Math.PI - direction);
+				direction = (float)((Math.PI - direction)%(2*Math.PI));
 				return true;
 			}
 			if (x > screenW - l ){
-				direction = (float)(Math.PI - direction);
+				direction = (float)((Math.PI - direction)%(2*Math.PI));
 				return true;
 			}
 			return false;
